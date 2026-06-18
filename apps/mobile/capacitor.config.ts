@@ -20,6 +20,7 @@ const config: CapacitorConfig = {
   },
   ios: {
     contentInset: "automatic",
+    limitsNavigationsToAppBoundDomains: false,
   },
   server: {
     androidScheme: "https",
@@ -28,6 +29,10 @@ const config: CapacitorConfig = {
       ? {
           url: serverUrl,
           cleartext: serverUrl.startsWith("http://"),
+          allowNavigation: [
+            new URL(serverUrl).host,
+            serverUrl.replace(/\/$/, ""),
+          ],
         }
       : {}),
   },

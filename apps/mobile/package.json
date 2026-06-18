@@ -13,7 +13,7 @@
     "cap:open": "cap open android",
     "cap:open:ios": "cap open ios",
     "android": "npx cross-env CAPACITOR_PLATFORM=android npm run build:android && npx cross-env CAPACITOR_PLATFORM=android cap sync android",
-    "ios": "npx cross-env CAPACITOR_PLATFORM=ios npm run build:ios && npx cross-env CAPACITOR_PLATFORM=ios cap sync ios && node scripts/patch-ios-plist.mjs"
+    "ios": "npx cross-env CAPACITOR_PLATFORM=ios npm run build:ios && npx cross-env CAPACITOR_PLATFORM=ios cap sync ios && node scripts/patch-ios-plist.mjs && node scripts/ensure-ios-server-url.mjs"
   },
   "dependencies": {
     "@capacitor-community/apple-sign-in": "^7.1.0",

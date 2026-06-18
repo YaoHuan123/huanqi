@@ -62,7 +62,7 @@ The iOS shell is an empty WebView — it loads **`CAPACITOR_SERVER_URL`** (Codem
 2. **Same network** — phone and PC on the same Wi‑Fi, *or* USB tethering if you use `192.168.137.1` (Windows USB 网卡地址).
 3. **Correct IP** — on PC run `ipconfig`, use the IPv4 of the adapter the phone can reach (often `192.168.1.x`, not always `192.168.137.1`).
 4. **Firewall** — allow inbound TCP **3001** on Windows.
-5. **iOS permission** — first launch may ask for **Local Network** access; tap Allow.
+5. **iOS permission** — Settings → Privacy & Security → **Local Network** → turn **HuanQi** on (Safari does not need this; the native app does). If missing, delete the app, reinstall the IPA, and tap **Allow** on first launch.
 6. **Safari test** — on the iPhone open `http://<your-pc-ip>:3001` in Safari. If Safari is blank, the app will be too.
 
 Reinstall the IPA after changing `CAPACITOR_SERVER_URL` in Codemagic and rebuilding.
