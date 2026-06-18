@@ -6,9 +6,7 @@
 #   Ad Hoc 描述文件 : huanqihoc.mobileprovision（profile 名称 huanqi-hoc）
 #   发布证书 .p12   : ..\发布证书\2b054e3a68074341bebf0230796bec0f.p12
 #
-# Codemagic → Team settings → Code signing identities 上传：
-#   Ad Hoc 描述文件 → Reference name: huanqi-hoc
-#   （Codemagic 中可用 Reference：yaohaun / yaohaunhdc / huanqi-hoc）
+# Codemagic → Code signing identities Reference name: huanqi-hoc
 #
 # Environment variable group "huanqi_production":
 #   CAPACITOR_SERVER_URL = https://your-deployed-web-app.com
@@ -141,10 +139,11 @@ workflows:
     instance_type: mac_mini_m2
 
     environment:
-      # 自动匹配 Codemagic 中已上传的 Ad Hoc 描述文件 huanqi-hoc + 对应 Distribution 证书
       ios_signing:
-        distribution_type: ad_hoc
-        bundle_identifier: io.github.YaoHuan123.huanqi
+        provisioning_profiles:
+          - huanqi-hoc
+        certificates:
+          - huanqi-hoc
       groups:
         - huanqi_production
       vars:
