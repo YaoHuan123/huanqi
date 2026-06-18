@@ -8,7 +8,7 @@
 #
 # Codemagic → Team settings → Code signing identities 上传时 Reference name 必须与下方 yaml 一致：
 #   Certificate reference : ios_distribution
-#   Profile reference     : huanqihoc
+#   Profile reference     : huanqi-hoc
 #
 # Environment variable group "huanqi_production":
 #   CAPACITOR_SERVER_URL = https://your-deployed-web-app.com
@@ -144,7 +144,7 @@ workflows:
       # 使用已上传的证书/描述文件 Reference name（不能与 distribution_type 同时使用）
       ios_signing:
         provisioning_profiles:
-          - huanqihoc
+          - huanqi-hoc
         certificates:
           - ios_distribution
       groups:
