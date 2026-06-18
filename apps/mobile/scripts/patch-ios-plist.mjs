@@ -16,6 +16,20 @@ if (!existsSync(plistPath)) {
 
 let xml = readFileSync(plistPath, "utf8");
 
+if (!xml.includes("NSAllowsArbitraryLoadsInWebContent")) {
+  xml = xml.replace(
+    /(<key>NSAllowsLocalNetworking<\/key>\s*<true\/>)/,
+    "$1\n\t\t<key>NSAllowsArbitraryLoadsInWebContent</key>\n\t\t<true/>",
+  );
+}
+
+if (!xml.includes("NSLocalNetworkUsageDescription")) {
+  const insert = `\t<key>NSLocalNetworkUsageDescription</key>
+\t<string>HuanQi needs local network access to connect to your development server.</string>
+`;
+  xml = xml.replace("</dict>\n</plist>", `${insert}</dict>\n</plist>`);
+}
+
 if (!xml.includes("NSAllowsLocalNetworking")) {
   const insert = `\t<key>NSAppTransportSecurity</key>
 \t<dict>

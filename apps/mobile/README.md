@@ -49,9 +49,24 @@ Edit `.env.ios.local`:
 CAPACITOR_SERVER_URL=http://192.168.x.x:3001
 ```
 
-Use your Mac/PC LAN IP where `npm run dev --workspace=web` runs.
+Use your Mac/PC LAN IP where `npm run dev --workspace=web` runs. Dev server listens on `0.0.0.0:3001` so the phone can reach it.
 
-## Auth on iOS
+### Black screen after install?
+
+The iOS shell is an empty WebView — it loads **`CAPACITOR_SERVER_URL`** (Codemagic debug: `http://192.168.137.1:3001`). A black screen means that URL did not load.
+
+1. **Start the backend on your PC** (must bind all interfaces):
+   ```bash
+   npm run dev --workspace=web
+   ```
+2. **Same network** — phone and PC on the same Wi‑Fi, *or* USB tethering if you use `192.168.137.1` (Windows USB 网卡地址).
+3. **Correct IP** — on PC run `ipconfig`, use the IPv4 of the adapter the phone can reach (often `192.168.1.x`, not always `192.168.137.1`).
+4. **Firewall** — allow inbound TCP **3001** on Windows.
+5. **iOS permission** — first launch may ask for **Local Network** access; tap Allow.
+6. **Safari test** — on the iPhone open `http://<your-pc-ip>:3001` in Safari. If Safari is blank, the app will be too.
+
+Reinstall the IPA after changing `CAPACITOR_SERVER_URL` in Codemagic and rebuilding.
+
 
 - **Production:** Sign in with Apple (`Continue with Apple` on login screen)
 - **Local dev mock** (no Apple Developer keys): set in `.env`:

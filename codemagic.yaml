@@ -75,6 +75,8 @@ workflows:
           set -e
           export CAPACITOR_PLATFORM=ios
           npm run ios --workspace=mobile
+          echo "=== capacitor.config.json (embedded server URL) ==="
+          cat apps/mobile/ios/App/App/capacitor.config.json
 
       - name: Install CocoaPods
         script: |
@@ -175,6 +177,8 @@ workflows:
           set -e
           export CAPACITOR_PLATFORM=ios
           npm run ios --workspace=mobile
+          echo "=== capacitor.config.json (embedded server URL) ==="
+          cat apps/mobile/ios/App/App/capacitor.config.json
 
       - name: Install CocoaPods
         script: |
