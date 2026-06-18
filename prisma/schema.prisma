@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  appleSub          String?   @unique
+  email             String    @unique
+  emailVerified     DateTime?
+  locale            String    @default("en")
+  termsAcceptedAt   DateTime?
+  privacyAcceptedAt DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  deletedAt         DateTime?
+
+  sensations Sensation[]
+  matchesAsA Match[]     @relation("MatchUserA")
+  matchesAsB Match[]     @relation("MatchUserB")
+  blocks     Block[]     @relation("Blocker")
+  blockedBy  Block[]     @relation("Blocked")
+  orders     Order[]
+  notifications Notification[]
+}
+
+model EmailOtp {
+  id        String    @id @default(cuid())
+  email     String
+  codeHash  String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email, createdAt])
+}
+
+model Sensation {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body         String
+  language     String   @default("en")
+  wordCount    Int
+  contentHash  String
+  embedding    Bytes?
+  isPublic     Boolean  @default(true)
+  moderatedOk  Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  matchesAsA Match[] @relation("MatchSensationA")
+  matchesAsB Match[] @relation("MatchSensationB")
+
+  @@index([language, isPublic, moderatedOk])
+  @@index([userId])
+  @@index([contentHash])
+}
+
+model Match {
+  id               String    @id @default(cuid())
+  userAId          String
+  userBId          String
+  sensationAId     String
+  sensationBId     String
+  userA            User      @relation("MatchUserA", fields: [userAId], references: [id], onDelete: Cascade)
+  userB            User      @relation("MatchUserB", fields: [userBId], references: [id], onDelete: Cascade)
+  sensationA       Sensation @relation("MatchSensationA", fields: [sensationAId], references: [id], onDelete: Cascade)
+  sensationB       Sensation @relation("MatchSensationB", fields: [sensationBId], references: [id], onDelete: Cascade)
+  similarityScore  Float
+  userAUnlockAt    DateTime?
+  userBUnlockAt    DateTime?
+  userAConfirmedAt DateTime?
+  userBConfirmedAt DateTime?
+  userAContactSharedAt DateTime?
+  userBContactSharedAt DateTime?
+  userASharedContactEncrypted String?
+  userBSharedContactEncrypted String?
+  createdAt        DateTime  @default(now())
+
+  @@unique([userAId, userBId])
+  @@index([userAId])
+  @@index([userBId])
+}
+
+model Notification {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  body      String
+  matchId   String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt])
+}
+
+model Block {
+  id        String   @id @default(cuid())
+  blockerId String
+  blockedId String
+  blocker   User     @relation("Blocker", fields: [blockerId], references: [id], onDelete: Cascade)
+  blocked   User     @relation("Blocked", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([blockerId, blockedId])
+}
+
+model Order {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  matchId         String?
+  productId       String
+  appleTransactionId String? @unique
+  status          String   @default("pending")
+  createdAt       DateTime @default(now())
+}

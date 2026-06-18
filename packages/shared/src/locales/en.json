@@ -1,0 +1,47 @@
+{
+  "app": {
+    "name": "HuanQi",
+    "tagline": "Find people who share the same surreal sensation"
+  },
+  "auth": {
+    "signInWithApple": "Continue with Apple",
+    "emailPlaceholder": "Email address",
+    "sendCode": "Send verification code",
+    "verifyCode": "Verify and continue",
+    "ageGate": "You must be 17 or older to use HuanQi."
+  },
+  "sensation": {
+    "title": "Write your sensation",
+    "hint": "Describe a surreal bodily or perceptual experience in your own words. No tags, photos, or appearance details.",
+    "wordCount": "{{count}} / {{max}} words (minimum {{min}})",
+    "englishOnly": "V1 accepts English sensation records only.",
+    "publish": "Publish to the resonance pool"
+  },
+  "contact": {
+    "title": "Contact",
+    "hint": "Only your login email can be shared, and only after you unlock and confirm a match.",
+    "email": "Login email"
+  },
+  "library": {
+    "title": "Resonance library",
+    "empty": "No sensations yet. Be the first to publish."
+  },
+  "matches": {
+    "title": "Your matches",
+    "unlock": "Unlock mutual contact — $0.99",
+    "preview": "Matched sensation preview",
+    "noChat": "HuanQi does not include in-app messaging."
+  },
+  "settings": {
+    "title": "Settings",
+    "export": "Export my sensations",
+    "deleteAccount": "Delete account permanently",
+    "disclaimer": "HuanQi only computes text similarity. Off-platform contact is at your own risk."
+  },
+  "errors": {
+    "moderationBlocked": "This sensation cannot be published under our content rules.",
+    "notEnglish": "Please write your sensation in English for this version.",
+    "tooShort": "Write at least {{min}} words.",
+    "tooLong": "Maximum {{max}} words."
+  }
+}
