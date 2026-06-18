@@ -106,11 +106,11 @@ workflows:
           xcode-project build-ipa \
             --workspace "App.xcworkspace" \
             --scheme "$XCODE_SCHEME"
+          ls -la build/ios/ipa/
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - apps/mobile/ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
-      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
 
     publishing:
       email:
@@ -164,14 +164,11 @@ workflows:
       - name: Configure Capacitor server URL
         script: |
           set -e
-          if [ -z "$CAPACITOR_SERVER_URL" ] || [ "$CAPACITOR_SERVER_URL" = "https://YOUR_WEB_APP_URL" ]; then
-            echo "ERROR: Set CAPACITOR_SERVER_URL in codemagic.yaml vars or Codemagic Environment variables."
-            exit 1
-          fi
           cat > apps/mobile/.env.ios.local <<EOF
           CAPACITOR_SERVER_URL=$CAPACITOR_SERVER_URL
           VITE_APP_URL=${VITE_APP_URL:-$CAPACITOR_SERVER_URL}
           EOF
+          echo "Capacitor server URL: $CAPACITOR_SERVER_URL"
 
       - name: Build mobile shell and sync iOS native project
         script: |
@@ -197,7 +194,8 @@ workflows:
           xcode-project build-ipa \
             --workspace "App.xcworkspace" \
             --scheme "$XCODE_SCHEME"
+          ls -la build/ios/ipa/
 
     artifacts:
-      - build/ios/ipa/*.ipa
+      - apps/mobile/ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
