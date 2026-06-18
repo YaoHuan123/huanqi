@@ -18,7 +18,7 @@ export async function signInWithAppleNative(): Promise<{ identityToken: string }
 
   const { SignInWithApple } = await import("@capacitor-community/apple-sign-in");
   const clientId =
-    process.env.NEXT_PUBLIC_APPLE_BUNDLE_ID?.trim() || "com.huanqi.app";
+    process.env.NEXT_PUBLIC_APPLE_BUNDLE_ID?.trim() || "io.github.YaoHuan123.huanqi";
 
   const result = await SignInWithApple.authorize({
     clientId,

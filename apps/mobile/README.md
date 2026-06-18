@@ -75,8 +75,8 @@ CAPACITOR_SERVER_URL=https://app.huanqi.com
 3. Configure Apple Sign In in Apple Developer + `.env`:
 
 ```
-APPLE_CLIENT_ID=com.huanqi.app
-NEXT_PUBLIC_APPLE_BUNDLE_ID=com.huanqi.app
+APPLE_CLIENT_ID=io.github.YaoHuan123.huanqi
+NEXT_PUBLIC_APPLE_BUNDLE_ID=io.github.YaoHuan123.huanqi
 ```
 
 4. `npm run ios` → archive in Xcode

@@ -12,7 +12,7 @@ for (const file of [`.env.${platform}`, `.env.${platform}.local`, ".env"]) {
 const serverUrl = process.env.CAPACITOR_SERVER_URL?.trim();
 
 const config: CapacitorConfig = {
-  appId: "com.huanqi.app",
+  appId: "io.github.YaoHuan123.huanqi",
   appName: "HuanQi",
   webDir: "dist",
   android: {

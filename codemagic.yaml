@@ -1,15 +1,17 @@
 # HuanQi iOS — Codemagic CI/CD
 #
-# Setup (Codemagic UI):
-# 1. Connect repo https://github.com/YaoHuan123/huanqi
-# 2. Team settings → Integrations → App Store Connect API key → name it (e.g. codemagic)
-# 3. Team settings → Code signing identities → iOS → upload cert + provisioning profile
-#    OR enable automatic code signing for bundle id com.huanqi.app
-# 4. App settings → Environment variables → group "huanqi_production":
-#      CAPACITOR_SERVER_URL = https://your-deployed-web-app.com
-#      VITE_APP_URL         = same as above (optional)
-# 5. Replace APP_STORE_APP_ID and app_store_connect integration name below
-# 6. Apple Developer: enable "Sign in with Apple" for com.huanqi.app
+# Apple 账号材料（本地路径 E:\ios调试和上线材料\huanqi）：
+#   Bundle ID : io.github.YaoHuan123.huanqi
+#   Team ID   : TCPBS85F56
+#   Ad Hoc 描述文件 : huanqihoc.mobileprovision（profile 名称 huanqi-hoc）
+#   发布证书 .p12   : ..\发布证书\2b054e3a68074341bebf0230796bec0f.p12
+#
+# Codemagic → Team settings → Code signing identities 上传时 Reference name 必须与下方 yaml 一致：
+#   Certificate reference : ios_distribution
+#   Profile reference     : huanqihoc
+#
+# Environment variable group "huanqi_production":
+#   CAPACITOR_SERVER_URL = https://your-deployed-web-app.com
 
 workflows:
   huanqi-ios-release:
@@ -18,21 +20,20 @@ workflows:
     instance_type: mac_mini_m2
 
     integrations:
-      app_store_connect: codemagic # ← replace with your App Store Connect API key name
+      app_store_connect: codemagic # ← 改成你在 Codemagic 里配置的 ASC API Key 名称
 
     environment:
       ios_signing:
         distribution_type: app_store
-        bundle_identifier: com.huanqi.app
+        bundle_identifier: io.github.YaoHuan123.huanqi
       groups:
-        - huanqi_production # CAPACITOR_SERVER_URL (+ optional VITE_APP_URL)
+        - huanqi_production
       vars:
-        BUNDLE_ID: com.huanqi.app
+        BUNDLE_ID: io.github.YaoHuan123.huanqi
+        APPLE_TEAM_ID: TCPBS85F56
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
-        # App Store Connect → App → General → Apple ID (numeric)
-        APP_STORE_APP_ID: "0000000000"
-        # Prisma postinstall only needs a valid URL format
+        APP_STORE_APP_ID: "0000000000" # ← App Store Connect 里的 Apple ID（数字）
         DATABASE_URL: "file:./dev.db"
         NODE_OPTIONS: "--max-old-space-size=4096"
       node: 20
@@ -79,7 +80,6 @@ workflows:
           CAPACITOR_SERVER_URL=$CAPACITOR_SERVER_URL
           VITE_APP_URL=${VITE_APP_URL:-$CAPACITOR_SERVER_URL}
           EOF
-          echo "Capacitor will load: $CAPACITOR_SERVER_URL"
 
       - name: Build mobile shell and sync iOS native project
         script: |
@@ -103,20 +103,19 @@ workflows:
           set -e
           cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
           if [ "$APP_STORE_APP_ID" = "0000000000" ]; then
-            echo "Using Codemagic BUILD_NUMBER because APP_STORE_APP_ID is not configured."
             NEXT=$BUILD_NUMBER
           else
             LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID" || true)
             NEXT=$((${LATEST:-0} + 1))
           fi
           agvtool new-version -all "$NEXT"
-          echo "iOS build number set to $NEXT"
 
       - name: Build signed IPA
         script: |
           set -e
+          cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
           xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/$XCODE_PROJECT_DIR/App.xcworkspace" \
+            --workspace "App.xcworkspace" \
             --scheme "$XCODE_SCHEME"
 
     artifacts:
@@ -127,7 +126,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - yao@example.com # ← replace with your email
+          - yao@example.com
         notify:
           success: true
           failure: true
@@ -137,18 +136,22 @@ workflows:
         submit_to_app_store: false
 
   huanqi-ios-adhoc:
-    name: HuanQi iOS Ad Hoc (internal)
+    name: HuanQi iOS Ad Hoc
     max_build_duration: 90
     instance_type: mac_mini_m2
 
     environment:
+      # 使用已上传的证书/描述文件 Reference name（不能与 distribution_type 同时使用）
       ios_signing:
-        distribution_type: ad_hoc
-        bundle_identifier: com.huanqi.app
+        provisioning_profiles:
+          - huanqihoc
+        certificates:
+          - ios_distribution
       groups:
         - huanqi_production
       vars:
-        BUNDLE_ID: com.huanqi.app
+        BUNDLE_ID: io.github.YaoHuan123.huanqi
+        APPLE_TEAM_ID: TCPBS85F56
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
         DATABASE_URL: "file:./dev.db"
@@ -156,14 +159,28 @@ workflows:
       xcode: latest
       cocoapods: default
 
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: master
+          include: true
+        - pattern: main
+          include: true
+
     scripts:
       - name: Install monorepo dependencies
-        script: npm ci
+        script: |
+          set -e
+          npm ci
 
       - name: Configure Capacitor server URL
         script: |
           set -e
-          test -n "$CAPACITOR_SERVER_URL"
+          if [ -z "$CAPACITOR_SERVER_URL" ]; then
+            echo "ERROR: Set CAPACITOR_SERVER_URL in the huanqi_production variable group."
+            exit 1
+          fi
           cat > apps/mobile/.env.ios.local <<EOF
           CAPACITOR_SERVER_URL=$CAPACITOR_SERVER_URL
           VITE_APP_URL=${VITE_APP_URL:-$CAPACITOR_SERVER_URL}
@@ -171,21 +188,27 @@ workflows:
 
       - name: Build mobile shell and sync iOS native project
         script: |
+          set -e
           export CAPACITOR_PLATFORM=ios
           npm run ios --workspace=mobile
 
       - name: Install CocoaPods
         script: |
+          set -e
           cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
           pod install
 
       - name: Set up code signing on Xcode project
-        script: xcode-project use-profiles
-
-      - name: Build signed IPA
         script: |
+          set -e
+          xcode-project use-profiles
+
+      - name: Build ad hoc IPA
+        script: |
+          set -e
+          cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
           xcode-project build-ipa \
-            --workspace "$CM_BUILD_DIR/$XCODE_PROJECT_DIR/App.xcworkspace" \
+            --workspace "App.xcworkspace" \
             --scheme "$XCODE_SCHEME"
 
     artifacts:
