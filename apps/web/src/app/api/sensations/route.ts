@@ -17,7 +17,7 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: NextRequest) {
   logRequest("POST", "/api/sensations");
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   try {
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest) {
 export async function GET() {
   logRequest("GET", "/api/sensations");
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const sensations = await prisma.sensation.findMany({

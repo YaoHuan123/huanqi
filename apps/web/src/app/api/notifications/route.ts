@@ -1,11 +1,12 @@
+import { NextRequest } from "next/server";
 import { requireApiSession } from "@/lib/auth/api-session";
 import { jsonOk, logRequest } from "@/lib/api/response";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   logRequest("GET", "/api/notifications");
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const notifications = await prisma.notification.findMany({
@@ -17,10 +18,10 @@ export async function GET() {
   return jsonOk({ notifications });
 }
 
-export async function POST() {
+export async function POST(request: NextRequest) {
   logRequest("POST", "/api/notifications/read-all");
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   await prisma.notification.updateMany({

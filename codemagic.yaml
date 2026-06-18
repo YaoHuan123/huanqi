@@ -1,135 +1,9 @@
-# HuanQi iOS — Codemagic CI/CD
+# HuanQi iOS — Codemagic (ios branch)
 #
-# Apple 账号材料（本地路径 E:\ios调试和上线材料\huanqi）：
-#   Bundle ID : io.github.YaoHuan123.huanqi
-#   Team ID   : TCPBS85F56
-#   Ad Hoc 描述文件 : huanqihoc.mobileprovision（profile 名称 huanqi-hoc）
-#   发布证书 .p12   : ..\发布证书\2b054e3a68074341bebf0230796bec0f.p12
-#
-# Codemagic → Code signing identities Reference name: huanqi-hoc
-#
-# 调试：WebView 指向局域网 dev 机器（npm run dev --workspace=web → :3001）
-#
+# Native app: UI bundled in IPA, API at VITE_API_BASE_URL
+# Codemagic → Code signing Reference name: huanqi-hoc (profile + cert)
+
 workflows:
-  huanqi-ios-release:
-    name: HuanQi iOS Release
-    max_build_duration: 120
-    instance_type: mac_mini_m2
-
-    integrations:
-      app_store_connect: codemagic # ← 改成你在 Codemagic 里配置的 ASC API Key 名称
-
-    environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: io.github.YaoHuan123.huanqi
-      vars:
-        BUNDLE_ID: io.github.YaoHuan123.huanqi
-        APPLE_TEAM_ID: TCPBS85F56
-        XCODE_SCHEME: App
-        XCODE_PROJECT_DIR: apps/mobile/ios/App
-        APP_STORE_APP_ID: "0000000000" # ← App Store Connect 里的 Apple ID（数字）
-        CAPACITOR_SERVER_URL: "http://192.168.137.1:3001"
-        DATABASE_URL: "file:./dev.db"
-        NODE_OPTIONS: "--max-old-space-size=4096"
-      node: 20
-      xcode: latest
-      cocoapods: default
-
-    cache:
-      cache_paths:
-        - $HOME/.npm
-        - $CM_BUILD_DIR/node_modules
-        - $CM_BUILD_DIR/apps/mobile/ios/App/Pods
-
-    triggering:
-      events:
-        - push
-        - tag
-      branch_patterns:
-        - pattern: master
-          include: true
-        - pattern: main
-          include: true
-      tag_patterns:
-        - pattern: "v*"
-          include: true
-
-    scripts:
-      - name: Install monorepo dependencies
-        script: |
-          set -e
-          npm ci
-
-      - name: Configure Capacitor server URL (production WebView target)
-        script: |
-          set -e
-          cat > apps/mobile/.env.ios.local <<EOF
-          CAPACITOR_SERVER_URL=$CAPACITOR_SERVER_URL
-          VITE_APP_URL=${VITE_APP_URL:-$CAPACITOR_SERVER_URL}
-          EOF
-          echo "Capacitor server URL: $CAPACITOR_SERVER_URL"
-
-      - name: Build mobile shell and sync iOS native project
-        script: |
-          set -e
-          export CAPACITOR_PLATFORM=ios
-          npm run ios --workspace=mobile
-          echo "=== capacitor.config.json (embedded server URL) ==="
-          cat apps/mobile/ios/App/App/capacitor.config.json
-          if grep -q '127.0.0.1' apps/mobile/ios/App/App/capacitor.config.json; then
-            echo "ERROR: capacitor.config.json still points at 127.0.0.1"
-            exit 1
-          fi
-
-      - name: Install CocoaPods
-        script: |
-          set -e
-          cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
-          pod install
-
-      - name: Set up code signing on Xcode project
-        script: |
-          set -e
-          xcode-project use-profiles
-
-      - name: Increment build number
-        script: |
-          set -e
-          cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
-          if [ "$APP_STORE_APP_ID" = "0000000000" ]; then
-            NEXT=$BUILD_NUMBER
-          else
-            LATEST=$(app-store-connect get-latest-testflight-build-number "$APP_STORE_APP_ID" || true)
-            NEXT=$((${LATEST:-0} + 1))
-          fi
-          agvtool new-version -all "$NEXT"
-
-      - name: Build signed IPA
-        script: |
-          set -e
-          cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
-          xcode-project build-ipa \
-            --workspace "App.xcworkspace" \
-            --scheme "$XCODE_SCHEME"
-          ls -la build/ios/ipa/
-
-    artifacts:
-      - apps/mobile/ios/App/build/ios/ipa/*.ipa
-      - /tmp/xcodebuild_logs/*.log
-
-    publishing:
-      email:
-        recipients:
-          - yao@example.com
-        notify:
-          success: true
-          failure: true
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
-        submit_to_app_store: false
-
   huanqi-ios-adhoc:
     name: HuanQi iOS Ad Hoc
     max_build_duration: 90
@@ -143,10 +17,11 @@ workflows:
           - huanqi-hoc
       vars:
         BUNDLE_ID: io.github.YaoHuan123.huanqi
-        APPLE_TEAM_ID: TCPBS85F56
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
-        CAPACITOR_SERVER_URL: "http://192.168.137.1:3001"
+        VITE_API_BASE_URL: "http://192.168.137.1:3001"
+        VITE_APPLE_BUNDLE_ID: io.github.YaoHuan123.huanqi
+        VITE_APPLE_DEV_MOCK: "1"
         DATABASE_URL: "file:./dev.db"
       node: 20
       xcode: latest
@@ -156,9 +31,7 @@ workflows:
       events:
         - push
       branch_patterns:
-        - pattern: master
-          include: true
-        - pattern: main
+        - pattern: ios
           include: true
 
     scripts:
@@ -167,26 +40,13 @@ workflows:
           set -e
           npm ci
 
-      - name: Configure Capacitor server URL
-        script: |
-          set -e
-          cat > apps/mobile/.env.ios.local <<EOF
-          CAPACITOR_SERVER_URL=$CAPACITOR_SERVER_URL
-          VITE_APP_URL=${VITE_APP_URL:-$CAPACITOR_SERVER_URL}
-          EOF
-          echo "Capacitor server URL: $CAPACITOR_SERVER_URL"
-
-      - name: Build mobile shell and sync iOS native project
+      - name: Build bundled native app and sync iOS
         script: |
           set -e
           export CAPACITOR_PLATFORM=ios
           npm run ios --workspace=mobile
-          echo "=== capacitor.config.json (embedded server URL) ==="
+          echo "=== Bundled app (no remote server.url) ==="
           cat apps/mobile/ios/App/App/capacitor.config.json
-          if grep -q '127.0.0.1' apps/mobile/ios/App/App/capacitor.config.json; then
-            echo "ERROR: capacitor.config.json still points at 127.0.0.1"
-            exit 1
-          fi
 
       - name: Install CocoaPods
         script: |
@@ -195,9 +55,7 @@ workflows:
           pod install
 
       - name: Set up code signing on Xcode project
-        script: |
-          set -e
-          xcode-project use-profiles
+        script: xcode-project use-profiles
 
       - name: Build ad hoc IPA
         script: |

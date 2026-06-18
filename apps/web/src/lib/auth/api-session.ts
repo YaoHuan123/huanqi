@@ -1,8 +1,9 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { getSession } from "@/lib/auth/session";
+import { getSessionFromRequest } from "@/lib/auth/session";
 
-export async function requireApiSession() {
-  const session = await getSession();
+export async function requireApiSession(request: NextRequest) {
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return { error: NextResponse.json({ ok: false, error: "Not authenticated" }, { status: 401 }) };
   }

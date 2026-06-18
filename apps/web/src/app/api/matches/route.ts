@@ -1,13 +1,14 @@
+import { NextRequest } from "next/server";
 import { requireApiSession } from "@/lib/auth/api-session";
 import { jsonOk, logRequest } from "@/lib/api/response";
 import { getMatchSide, isUnlocked } from "@/lib/match/state";
 import { excerpt } from "@/lib/sensation/text";
 import { prisma } from "@/lib/prisma";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   logRequest("GET", "/api/matches");
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const userId = auth.session.sub;

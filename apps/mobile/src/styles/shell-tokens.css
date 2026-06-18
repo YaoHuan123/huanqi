@@ -1,0 +1,24 @@
+/* HuanQi native app shell */
+:root {
+  --shell-bg-canvas: #0c0a09;
+  --shell-bg-grouped: #0c0a09;
+  --shell-bg-elevated: #1c1917;
+  --shell-bg-muted: #292524;
+  --shell-label-1: #fafaf9;
+  --shell-label-2: #a8a29e;
+  --shell-label-3: #78716c;
+  --shell-brand: #8b5cf6;
+  --shell-brand-deep: #7c3aed;
+  --shell-brand-soft: rgba(139, 92, 246, 0.12);
+  --shell-brand-ring: rgba(139, 92, 246, 0.35);
+  --shell-frame-border: rgba(255, 255, 255, 0.14);
+  --shell-separator: rgba(255, 255, 255, 0.08);
+  --shell-radius-sm: 10px;
+  --shell-radius-md: 14px;
+  --shell-radius-lg: 18px;
+  --shell-radius-phone: 28px;
+  --shell-shadow-float: none;
+  --shell-phone-max: 100%;
+  --shell-tabbar-reserve: calc(56px + env(safe-area-inset-bottom, 0px));
+  --shell-font: system-ui, -apple-system, sans-serif;
+}

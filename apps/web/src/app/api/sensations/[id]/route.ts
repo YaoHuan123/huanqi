@@ -10,7 +10,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("DELETE", `/api/sensations/${id}`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const deleted = await deleteUserSensation(auth.session.sub, id);
@@ -25,7 +25,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("GET", `/api/sensations/${id}`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const sensation = await prisma.sensation.findFirst({

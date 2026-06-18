@@ -1,0 +1,142 @@
+html {
+  background: var(--shell-bg-grouped);
+}
+
+body {
+  margin: 0;
+  font-family: var(--shell-font);
+  color: var(--shell-label-1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-root {
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--shell-bg-grouped);
+}
+
+.app-shell-phone {
+  width: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
+  background: var(--shell-bg-grouped);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-top: env(safe-area-inset-top, 0px);
+  box-sizing: border-box;
+  flex: 1;
+}
+
+.app-shell-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.app-shell-body--tabs {
+  padding-bottom: var(--shell-tabbar-reserve);
+}
+
+.shell-scroll-y {
+  flex: 1;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.app-page-content {
+  padding: 16px 16px 24px;
+  box-sizing: border-box;
+}
+
+.app-shell-tabbar-outer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--shell-tabbar-reserve);
+  z-index: 25;
+}
+
+.app-shell-tabbar {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: flex-start;
+  padding: 4px 8px calc(8px + env(safe-area-inset-bottom, 0px));
+  background: rgba(12, 10, 9, 0.92);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--shell-separator);
+}
+
+.app-shell-tab {
+  border: none;
+  background: transparent;
+  color: var(--shell-label-3);
+  font-size: 10px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  padding: 6px 4px 4px;
+  flex: 1;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.app-shell-tab__icon {
+  width: 22px;
+  height: 22px;
+  opacity: 0.65;
+}
+
+.app-shell-tab.active {
+  color: var(--shell-brand);
+}
+
+.app-shell-tab.active .app-shell-tab__icon {
+  opacity: 1;
+}
+
+.login-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+  padding: 24px 20px calc(32px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+
+.login-hero {
+  text-align: center;
+}
+
+.login-shell-title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--shell-brand);
+}
+
+.login-card {
+  background: var(--shell-bg-elevated);
+  border-radius: var(--shell-radius-lg);
+  border: 1px solid var(--shell-separator);
+  padding: 20px 18px;
+  display: grid;
+  gap: 14px;
+}

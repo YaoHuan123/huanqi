@@ -1,12 +1,13 @@
-import { clearSession, requireSession } from "@/lib/auth/session";
+import { NextRequest } from "next/server";
+import { clearSession, requireSessionFromRequest } from "@/lib/auth/session";
 import { deleteUserAccount } from "@/lib/user/account";
 import { jsonError, jsonOk, logRequest } from "@/lib/api/response";
 
-export async function DELETE() {
+export async function DELETE(request: NextRequest) {
   logRequest("DELETE", "/api/auth/account");
 
   try {
-    const session = await requireSession();
+    const session = await requireSessionFromRequest(request);
     await deleteUserAccount(session.sub);
     await clearSession();
     return jsonOk({ message: "Account permanently deleted" });

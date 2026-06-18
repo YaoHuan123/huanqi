@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@import "./styles/shell-tokens.css";
+@import "./styles/app-shell.css";
+
+html.capacitor-native {
+  background: var(--shell-bg-grouped);
+}
+
+html.capacitor-native body,
+html.capacitor-native #root {
+  min-height: 100dvh;
+  background: var(--shell-bg-grouped);
+}

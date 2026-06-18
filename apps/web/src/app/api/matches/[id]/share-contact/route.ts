@@ -19,7 +19,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("POST", `/api/matches/${id}/share-contact`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const match = await prisma.match.findFirst({

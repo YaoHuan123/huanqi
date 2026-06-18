@@ -23,13 +23,14 @@ export async function POST(request: NextRequest) {
       emailVerified: profile.emailVerified,
     });
 
-    await createSession(user.id, user.email);
+    const token = await createSession(user.id, user.email);
 
     return jsonOk({
       user: {
         id: user.id,
         email: user.email,
       },
+      token,
     });
   } catch (error) {
     if (error instanceof Error && error.message === "EMAIL_BOUND_TO_OTHER_APPLE_ID") {

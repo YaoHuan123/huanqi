@@ -1,11 +1,12 @@
-import { clearSession, getSession } from "@/lib/auth/session";
+import { NextRequest } from "next/server";
+import { clearSession, getSessionFromRequest } from "@/lib/auth/session";
 import { getUserById } from "@/lib/user/repository";
 import { jsonError, jsonOk, logRequest } from "@/lib/api/response";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   logRequest("GET", "/api/auth/me");
 
-  const session = await getSession();
+  const session = await getSessionFromRequest(request);
   if (!session) {
     return jsonError("Not authenticated", 401);
   }
@@ -16,4 +17,9 @@ export async function GET() {
   }
 
   return jsonOk({ user });
+}
+
+export async function DELETE() {
+  await clearSession();
+  return jsonOk({ ok: true });
 }

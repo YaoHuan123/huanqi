@@ -77,7 +77,7 @@ export async function GET(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("GET", `/api/matches/${id}`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const match = await loadMatch(id, auth.session.sub);
@@ -93,7 +93,7 @@ export async function POST(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("POST", `/api/matches/${id}/unlock`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const match = await loadMatch(id, auth.session.sub);
@@ -135,7 +135,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("DELETE", `/api/matches/${id}`);
 
-  const auth = await requireApiSession();
+  const auth = await requireApiSession(request);
   if ("error" in auth) return auth.error;
 
   const match = await prisma.match.findFirst({
