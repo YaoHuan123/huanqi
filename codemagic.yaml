@@ -8,8 +8,7 @@
 #
 # Codemagic → Code signing identities Reference name: huanqi-hoc
 #
-# Environment variable group "huanqi_production":
-#   CAPACITOR_SERVER_URL = https://your-deployed-web-app.com
+# 在 codemagic.yaml 的 CAPACITOR_SERVER_URL 填入已部署的 apps/web HTTPS 地址
 
 workflows:
   huanqi-ios-release:
@@ -24,14 +23,13 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: io.github.YaoHuan123.huanqi
-      groups:
-        - huanqi_production
       vars:
         BUNDLE_ID: io.github.YaoHuan123.huanqi
         APPLE_TEAM_ID: TCPBS85F56
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
         APP_STORE_APP_ID: "0000000000" # ← App Store Connect 里的 Apple ID（数字）
+        CAPACITOR_SERVER_URL: "https://YOUR_WEB_APP_URL" # ← 改成 apps/web 生产 HTTPS 地址
         DATABASE_URL: "file:./dev.db"
         NODE_OPTIONS: "--max-old-space-size=4096"
       node: 20
@@ -66,8 +64,8 @@ workflows:
       - name: Configure Capacitor server URL (production WebView target)
         script: |
           set -e
-          if [ -z "$CAPACITOR_SERVER_URL" ]; then
-            echo "ERROR: Set CAPACITOR_SERVER_URL in the huanqi_production variable group."
+          if [ -z "$CAPACITOR_SERVER_URL" ] || [ "$CAPACITOR_SERVER_URL" = "https://YOUR_WEB_APP_URL" ]; then
+            echo "ERROR: Set CAPACITOR_SERVER_URL in codemagic.yaml vars or Codemagic Environment variables."
             exit 1
           fi
           if [[ ! "$CAPACITOR_SERVER_URL" =~ ^https:// ]]; then
@@ -144,13 +142,12 @@ workflows:
           - huanqi-hoc
         certificates:
           - huanqi-hoc
-      groups:
-        - huanqi_production
       vars:
         BUNDLE_ID: io.github.YaoHuan123.huanqi
         APPLE_TEAM_ID: TCPBS85F56
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
+        CAPACITOR_SERVER_URL: "https://YOUR_WEB_APP_URL" # ← 改成 apps/web 生产 HTTPS 地址
         DATABASE_URL: "file:./dev.db"
       node: 20
       xcode: latest
@@ -174,8 +171,8 @@ workflows:
       - name: Configure Capacitor server URL
         script: |
           set -e
-          if [ -z "$CAPACITOR_SERVER_URL" ]; then
-            echo "ERROR: Set CAPACITOR_SERVER_URL in the huanqi_production variable group."
+          if [ -z "$CAPACITOR_SERVER_URL" ] || [ "$CAPACITOR_SERVER_URL" = "https://YOUR_WEB_APP_URL" ]; then
+            echo "ERROR: Set CAPACITOR_SERVER_URL in codemagic.yaml vars or Codemagic Environment variables."
             exit 1
           fi
           cat > apps/mobile/.env.ios.local <<EOF
