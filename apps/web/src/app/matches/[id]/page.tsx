@@ -112,12 +112,12 @@ export default function MatchDetailPage() {
   }
 
   if (loading) {
-    return <p className="mx-auto max-w-2xl px-6 py-10 text-sm text-stone-500">Loading…</p>;
+    return <p className="app-page-content text-sm text-stone-500">Loading…</p>;
   }
 
   if (!match) {
     return (
-      <div className="mx-auto max-w-2xl px-6 py-10">
+      <div className="app-page-content">
         <p className="text-sm text-red-400">{error ?? "Match not found"}</p>
         <Link href="/matches" className="mt-4 inline-block text-sm text-violet-300">
           ← Back to matches
@@ -127,7 +127,7 @@ export default function MatchDetailPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
+    <div className="app-page-content">
       <Link href="/matches" className="text-sm text-stone-500 hover:text-stone-300">
         ← Back to matches
       </Link>

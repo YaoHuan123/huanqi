@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { APP_NAME, APP_TAGLINE } from "@huanqi/shared";
-import { AppNav } from "@/components/app-nav";
+import { AppChrome } from "@/components/app-chrome";
+import { NativeShell } from "@/components/native-shell";
+import { ServerUrlBootstrap } from "@/components/server-url-bootstrap";
+import "@/styles/shell-tokens.css";
+import "@/styles/app-shell.css";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,6 +21,22 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: APP_NAME,
   description: APP_TAGLINE,
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/apple-touch-icon.png", type: "image/png" }],
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: APP_NAME,
+  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#44403c",
 };
 
 export default function RootLayout({
@@ -27,11 +47,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`app-web-shell ${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-stone-950 text-stone-100">
-        <AppNav />
-        {children}
+      <body className="h-full">
+        <NativeShell />
+        <ServerUrlBootstrap />
+        <AppChrome>{children}</AppChrome>
       </body>
     </html>
   );

@@ -7,12 +7,13 @@ V1 is **English-only**: UI, sensation records, matching pool, Privacy Policy, an
 ## Monorepo
 
 ```
-apps/web      Next.js API + marketing / legal pages
+apps/web      Next.js API + web UI (port 3001)
+apps/mobile   Capacitor Android/iOS shell (loads web app)
 packages/shared  English copy, constants, shared types
 prisma/       Database schema
 ```
 
-`apps/ios` (Expo) will be added in the next phase.
+`apps/mobile` wraps the web app in a native shell (same pattern as hello story2). See `apps/mobile/README.md`.
 
 ## Requirements
 
@@ -40,6 +41,10 @@ Unlock is **free on web beta** (`WEB_BETA_FREE_UNLOCK=true`). iOS will use Apple
 - Settings + sign out + **one-click account delete**
 - AES-256-GCM contact encryption helper (`src/lib/crypto/contact.ts`)
 
+## Web app shell
+
+The web UI uses a **mobile app-style shell** (centered phone frame on desktop, bottom tab bar when signed in). Native Capacitor builds (`apps/mobile`) are deferred until the web shell is finalized.
+
 ## Local setup (SQLite + Volcengine Ark)
 
 ```bash
@@ -48,7 +53,20 @@ cp .env.example .env
 # Copy OPENAI_* from hello chat backend/.env
 npm run db:push
 npm run dev --workspace=web
+# → http://localhost:3001
 ```
+
+### iOS app (Capacitor — requires Mac + Xcode)
+
+```bash
+npm run dev --workspace=web          # keep running on :3001
+cd apps/mobile && npm install
+cp .env.ios.example .env.ios.local
+npm run ios                          # from repo root: npm run ios
+npm run ios:open                     # Xcode → Run on Simulator
+```
+
+See [`apps/mobile/README.md`](apps/mobile/README.md) for Sign in with Apple setup.
 
 - **Database**: local SQLite at `prisma/dev.db` (no Docker/Postgres needed)
 - **AI**: uses `OPENAI_BASE_URL` + `OPENAI_API_KEY` from hello chat (Volcengine Ark)

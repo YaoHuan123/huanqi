@@ -9,6 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@capacitor-community/apple-sign-in": "^7.1.0",
+    "@capacitor/core": "^7.4.2",
+    "@capacitor/preferences": "^7.0.1",
+    "@capacitor/status-bar": "^7.0.1",
     "@huanqi/shared": "*",
     "@prisma/client": "^6.9.0",
     "apple-signin-auth": "^1.7.7",

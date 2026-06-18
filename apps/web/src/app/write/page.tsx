@@ -96,7 +96,7 @@ export default function WritePage() {
   const atDailyLimit = quota !== null && !quota.unlimited && quota.remaining === 0;
 
   return (
-    <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
+    <div className="app-page-content">
       <h1 className="text-2xl font-semibold">Write your sensation</h1>
       <p className="mt-2 max-w-xl text-sm leading-relaxed text-stone-400">
         Describe a surreal bodily or perceptual experience in your own words. English only.

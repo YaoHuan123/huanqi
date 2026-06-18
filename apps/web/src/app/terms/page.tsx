@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function TermsPage() {
   return (
-    <article className="mx-auto max-w-2xl px-6 py-16 prose prose-invert prose-stone">
+    <article className="app-page-content prose prose-invert prose-stone prose-sm max-w-none">
       <Link href="/" className="text-sm text-stone-400 no-underline hover:text-stone-200">
         ← Back
       </Link>

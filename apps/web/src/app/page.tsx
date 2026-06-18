@@ -11,7 +11,7 @@ export default async function Home() {
   const session = await getSession();
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-12 px-6 pb-20 pt-10">
+    <main className="app-page-content flex flex-col gap-10">
       <section className="space-y-6">
         <div className="flex items-center gap-3">
           <span className="rounded-full border border-stone-700 px-3 py-1 text-xs text-stone-400">

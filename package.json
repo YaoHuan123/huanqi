@@ -5,13 +5,23 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "lint": "turbo lint",
+    "dev:web": "npm run dev --workspace=web",
+    "dev:mobile": "npm run dev --workspace=mobile",
+    "build:android": "npm run android --workspace=mobile",
+    "build:ios": "npm run ios --workspace=mobile",
+    "android": "npm run android --workspace=mobile",
+    "android:open": "npm run cap:open --workspace=mobile",
+    "ios": "npm run ios --workspace=mobile",
+    "ios:open": "npm run cap:open:ios --workspace=mobile",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
+    "icons:generate": "node scripts/generate-app-icons.mjs",
     "postinstall": "prisma generate"
   },
   "devDependencies": {
     "prisma": "^6.9.0",
+    "sharp": "^0.34.5",
     "turbo": "^2.5.4",
     "typescript": "^5.8.3"
   },

@@ -59,7 +59,7 @@ export default function LibraryPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-2xl flex-1 px-6 py-10">
+    <div className="app-page-content">
       <h1 className="text-2xl font-semibold">My sensations</h1>
       <p className="mt-2 text-sm text-stone-400">
         Your published sensations. Delete any entry to remove it from matching.

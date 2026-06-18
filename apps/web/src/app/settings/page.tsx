@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/user/repository";
 import { DeleteAccountButton } from "./delete-account-button";
+import { ServerUrlForm } from "./server-url-form";
 import { SignOutButton } from "./sign-out-button";
 
 export default async function SettingsPage() {
@@ -17,7 +18,7 @@ export default async function SettingsPage() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-md flex-1 flex-col px-6 py-16">
+    <div className="app-page-content">
       <Link href="/" className="text-sm text-stone-500 hover:text-stone-300">
         ← Home
       </Link>
@@ -33,6 +34,8 @@ export default async function SettingsPage() {
           to share this email in that match.
         </p>
       </section>
+
+      <ServerUrlForm />
 
       <section className="mt-6 space-y-4 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
         <div>

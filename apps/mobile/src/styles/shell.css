@@ -1,0 +1,82 @@
+:root {
+  --shell-bg-canvas: #0c0a09;
+  --shell-bg-surface: #1c1917;
+  --shell-label-1: #fafaf9;
+  --shell-label-2: #a8a29e;
+  --shell-accent: #8b5cf6;
+  --shell-phone-max: 430px;
+  --shell-font: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+html {
+  background: var(--shell-bg-canvas);
+}
+
+body {
+  margin: 0;
+  font-family: var(--shell-font);
+  color: var(--shell-label-1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+  background: var(--shell-bg-canvas);
+}
+
+.app-shell-phone {
+  width: 100%;
+  max-width: var(--shell-phone-max);
+  min-height: 100dvh;
+  margin: 0 auto;
+  background: var(--shell-bg-surface);
+  border-left: 1px solid #292524;
+  border-right: 1px solid #292524;
+}
+
+html.capacitor-native #root {
+  justify-content: stretch;
+}
+
+html.capacitor-native .app-shell-phone {
+  max-width: none;
+  border: none;
+}
+
+.shell-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 100dvh;
+  padding: 24px;
+  text-align: center;
+}
+
+.shell-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--shell-accent);
+}
+
+.shell-muted {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--shell-label-2);
+}
+
+.shell-link {
+  color: var(--shell-accent);
+  text-decoration: none;
+}
+
+.shell-link:hover {
+  text-decoration: underline;
+}
