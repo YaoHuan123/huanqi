@@ -34,6 +34,18 @@ VITE_APPLE_DEV_MOCK=1
 
 No `CAPACITOR_SERVER_URL` — the UI ships inside the app.
 
+## Sign in with Apple troubleshooting
+
+**Error `AuthorizationError 1000`** means the iOS build is missing Apple Sign In entitlements or the App ID is not configured.
+
+1. **Apple Developer** → Identifiers → `io.github.YaoHuan123.huanqi` → enable **Sign in with Apple** → Save.
+2. **Xcode** → App target → **Signing & Capabilities** → **+ Capability** → **Sign in with Apple** (repo includes `App/App.entitlements`).
+3. **Device** → Settings → sign in to your **Apple Account** (required even on a real iPhone).
+4. **Rebuild** after changes: `npm run ios --workspace=mobile` then Run from Xcode (not an old IPA).
+5. **Backend** `.env`: set `APPLE_CLIENT_ID=io.github.YaoHuan123.huanqi` (must match bundle ID).
+
+For local API testing without Apple, set `VITE_APPLE_DEV_MOCK=1` in the mobile env **and** `APPLE_AUTH_DEV_MOCK=1` in the web `.env` (browser dev only; does not apply on native iOS).
+
 ## Codemagic
 
 Push to **`ios`** branch. Workflow builds bundled IPA with `VITE_API_BASE_URL` from yaml vars.
