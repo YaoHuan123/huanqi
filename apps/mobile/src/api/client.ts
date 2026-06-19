@@ -79,6 +79,7 @@ export async function sendEmailCode(email: string) {
   );
 }
 
+/** @deprecated V1 is iOS + Sign in with Apple only; kept for local dev tooling. */
 export async function verifyEmailCode(email: string, code: string) {
   return apiRequest<AuthResponse>("/api/auth/email/verify", {
     method: "POST",

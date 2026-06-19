@@ -2,18 +2,18 @@
 
 **Find people who share the same surreal sensation.**
 
-V1 is **English-only**: UI, sensation records, matching pool, Privacy Policy, and App Store listing.
+V1 is **English-only** and **iOS-only**: Sign in with Apple in the native app. This web project is the API backend plus Privacy Policy / Terms.
 
 ## Monorepo
 
 ```
-apps/web      Next.js API + web UI (port 3001)
-apps/mobile   Capacitor Android/iOS shell (loads web app)
+apps/web      Next.js API + marketing site (port 3001)
+apps/mobile   iOS native SPA (Vite + Capacitor)
 packages/shared  English copy, constants, shared types
 prisma/       Database schema
 ```
 
-`apps/mobile` wraps the web app in a native shell (same pattern as hello story2). See `apps/mobile/README.md`.
+See `apps/mobile/README.md` for iOS build and Sign in with Apple setup.
 
 ## Requirements
 
@@ -21,29 +21,24 @@ prisma/       Database schema
 - pnpm 9+
 - PostgreSQL (local or Supabase)
 
-## Web app flow
+## iOS app flow
 
-| Page | Path |
-|------|------|
+| Screen | Path |
+|--------|------|
+| Sign in with Apple | `/login` |
 | Write sensation | `/write` |
-| My sensations (manage / delete) | `/library` |
+| My sensations | `/library` |
 | Matches | `/matches` |
-| Match detail + unlock | `/matches/[id]` |
+| Match detail + IAP unlock | `/matches/:id` |
 | Settings / delete account | `/settings` |
 
-Unlock is **free on web beta** (`WEB_BETA_FREE_UNLOCK=true`). iOS will use Apple IAP later.
+Unlock uses **Apple IAP** on iOS (`$0.99` consumable). Web API supports a free-unlock beta flag for development only.
 
-## Phase 1 (done)
+## Auth
 
-- Email OTP login (`/login` → `/api/auth/email/*`)
-- Sign in with Apple API (`POST /api/auth/apple`) — configure Apple keys for iOS
-- Session cookie (JWT, 30 days)
-- Settings + sign out + **one-click account delete**
-- AES-256-GCM contact encryption helper (`src/lib/crypto/contact.ts`)
-
-## Web app shell
-
-The web UI uses a **mobile app-style shell** (centered phone frame on desktop, bottom tab bar when signed in). Native Capacitor builds (`apps/mobile`) are deferred until the web shell is finalized.
+- **Production (iOS)**: Sign in with Apple only → `POST /api/auth/apple`
+- **Web browser**: marketing home + legal pages; app routes redirect to login (iOS-only message)
+- Email OTP API remains for local dev tooling but is not exposed in the iOS UI
 
 ## Local setup (SQLite + Volcengine Ark)
 
@@ -85,9 +80,9 @@ openssl rand -hex 32      # CONTACT_ENCRYPTION_KEY
 | In scope | Deferred (V2) |
 |----------|----------------|
 | English UI & sensations | Chinese UI |
-| Sign in with Apple + Email OTP | Phone SMS login |
+| iOS app + Sign in with Apple | Email OTP login, Web app UI |
 | OpenAI embeddings + moderation | Tongyi / cross-language matching |
 | Apple IAP | Stripe, WeChat Pay |
-| Email / Instagram / Discord contacts | WeChat, Xiaohongshu |
+| Apple account email contact | Instagram, Discord handles |
 
 See `幻契：超现实体感同频匹配工具 产品定位+Cursor开发TODO文档.md` for the full product spec.

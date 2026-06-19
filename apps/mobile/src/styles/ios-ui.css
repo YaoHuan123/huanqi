@@ -412,10 +412,11 @@
 
 .ios-login-logo {
   margin: 0;
-  font-size: 40px;
+  font-size: 32px;
   font-weight: 700;
-  letter-spacing: -0.02em;
-  color: var(--shell-label-1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--shell-brand);
 }
 
 .ios-login-tagline {
@@ -430,6 +431,21 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+}
+
+.ios-login-hint {
+  margin: 0;
+  font-size: var(--ios-footnote-size);
+  line-height: 1.45;
+  color: var(--shell-label-2);
+}
+
+.ios-login-footnote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--shell-label-3);
 }
 
 .ios-loading {
