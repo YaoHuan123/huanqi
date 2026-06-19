@@ -1,24 +1,34 @@
-/* HuanQi native app shell */
+/* HuanQi iOS-native shell tokens */
 :root {
-  --shell-bg-canvas: #0c0a09;
-  --shell-bg-grouped: #0c0a09;
-  --shell-bg-elevated: #1c1917;
-  --shell-bg-muted: #292524;
-  --shell-label-1: #fafaf9;
-  --shell-label-2: #a8a29e;
-  --shell-label-3: #78716c;
-  --shell-brand: #8b5cf6;
-  --shell-brand-deep: #7c3aed;
-  --shell-brand-soft: rgba(139, 92, 246, 0.12);
-  --shell-brand-ring: rgba(139, 92, 246, 0.35);
-  --shell-frame-border: rgba(255, 255, 255, 0.14);
-  --shell-separator: rgba(255, 255, 255, 0.08);
-  --shell-radius-sm: 10px;
-  --shell-radius-md: 14px;
-  --shell-radius-lg: 18px;
-  --shell-radius-phone: 28px;
-  --shell-shadow-float: none;
-  --shell-phone-max: 100%;
-  --shell-tabbar-reserve: calc(56px + env(safe-area-inset-bottom, 0px));
-  --shell-font: system-ui, -apple-system, sans-serif;
+  --shell-bg-canvas: #000000;
+  --shell-bg-grouped: #000000;
+  --shell-bg-elevated: #1c1c1e;
+  --shell-bg-secondary: #2c2c2e;
+  --shell-bg-muted: #3a3a3c;
+
+  --shell-label-1: #ffffff;
+  --shell-label-2: rgba(235, 235, 245, 0.6);
+  --shell-label-3: rgba(235, 235, 245, 0.3);
+
+  --shell-brand: #bf5af2;
+  --shell-brand-deep: #9d4edd;
+  --shell-brand-soft: rgba(191, 90, 242, 0.15);
+  --shell-brand-ring: rgba(191, 90, 242, 0.4);
+
+  --shell-separator: rgba(84, 84, 88, 0.65);
+  --shell-separator-opaque: #38383a;
+
+  --shell-radius-group: 10px;
+  --shell-radius-button: 12px;
+
+  --shell-tabbar-reserve: calc(49px + env(safe-area-inset-bottom, 0px));
+  --shell-navbar-height: 44px;
+
+  --shell-font: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", system-ui, sans-serif;
+
+  --ios-large-title-size: 34px;
+  --ios-title-2-size: 22px;
+  --ios-body-size: 17px;
+  --ios-footnote-size: 13px;
+  --ios-caption-size: 12px;
 }

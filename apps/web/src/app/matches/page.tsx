@@ -26,41 +26,36 @@ export default function MatchesPage() {
 
   return (
     <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">Your matches</h1>
-      <p className="mt-2 text-sm text-stone-400">
+      <h1 className="shell-page-title">Your matches</h1>
+      <p className="shell-page-desc">
         Mutual semantic resonance only. HuanQi does not include in-app messaging.
       </p>
 
       {loading ? (
         <p className="mt-10 text-sm text-stone-500">Loading…</p>
       ) : matches.length === 0 ? (
-        <div className="mt-10 rounded-xl border border-stone-800 bg-stone-900/30 p-6 text-sm text-stone-400">
+        <div className="shell-empty-state">
           <p>No matches yet.</p>
           <p className="mt-2">
-            <Link href="/write" className="text-violet-300 hover:underline">
+            <Link href="/write" className="shell-link">
               Write a sensation
             </Link>{" "}
             to get started.
           </p>
         </div>
       ) : (
-        <ul className="mt-8 space-y-4">
+        <ul className="shell-list">
           {matches.map((match) => (
             <li key={match.id}>
-              <Link
-                href={`/matches/${match.id}`}
-                className="block rounded-xl border border-stone-800 bg-stone-900/40 p-5 transition hover:border-violet-900/60"
-              >
+              <Link href={`/matches/${match.id}`} className="shell-match-card">
                 <div className="flex items-center justify-between gap-4">
-                  <span className="text-sm font-medium text-violet-300">
-                    {match.similarityPercent}% resonance
-                  </span>
-                  <span className="text-xs text-stone-500">
+                  <span className="shell-match-score">{match.similarityPercent}% resonance</span>
+                  <span className="shell-match-meta">
                     {match.unlocked ? "Unlocked" : "Preview only"}
                   </span>
                 </div>
-                <p className="mt-3 text-sm leading-relaxed text-stone-300">{match.preview}</p>
-                <p className="mt-3 text-xs text-stone-500">
+                <p className="shell-match-preview">{match.preview}</p>
+                <p className="shell-match-meta mt-3">
                   {new Date(match.createdAt).toLocaleDateString("en-US")}
                 </p>
               </Link>

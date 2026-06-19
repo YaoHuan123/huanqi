@@ -8,9 +8,9 @@ import "./index.css";
 
 async function bootstrap() {
   if (isNativeApp()) {
-    document.documentElement.classList.add("capacitor-native");
+    document.documentElement.classList.add("capacitor-native", "app-native");
     await StatusBar.setStyle({ style: Style.Dark });
-    await StatusBar.setBackgroundColor({ color: "#0c0a09" });
+    await StatusBar.setBackgroundColor({ color: "#000000" });
   }
 
   createRoot(document.getElementById("root")!).render(

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/client";
+import { IosBanner, IosEmptyState, IosLargeTitle, IosPage } from "../components/ios/IosChrome";
 
 type MySensation = {
   id: string;
@@ -35,36 +35,63 @@ export function LibraryPage() {
   }
 
   return (
-    <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">My sensations</h1>
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+    <IosPage>
+      <IosLargeTitle title="Mine" subtitle="Your published sensations." />
+
+      {error && <IosBanner tone="error">{error}</IosBanner>}
+
       {loading ? (
-        <p className="mt-10 text-sm text-stone-500">Loading…</p>
+        <p className="ios-loading">Loading…</p>
       ) : items.length === 0 ? (
-        <p className="mt-10 text-sm text-stone-400">
-          Nothing yet. <Link to="/write" className="text-violet-300">Write one</Link>
-        </p>
+        <IosEmptyState
+          title="Nothing here yet"
+          body="Write your first sensation to start finding resonance."
+          actionLabel="Go to Write"
+          actionTo="/write"
+        />
       ) : (
-        <ul className="mt-8 space-y-4">
+        <div className="ios-group" style={{ margin: "8px 16px 0" }}>
           {items.map((item) => (
-            <li key={item.id} className="rounded-xl border border-stone-800 bg-stone-900/40 p-5">
-              <p className="whitespace-pre-wrap text-sm text-stone-200">{item.body.slice(0, 280)}</p>
-              <div className="mt-3 flex justify-between gap-3">
-                <p className="text-xs text-stone-500">
+            <div key={item.id} className="ios-row" style={{ flexDirection: "column", alignItems: "stretch" }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: "var(--ios-body-size)",
+                  lineHeight: 1.4,
+                  color: "var(--shell-label-1)",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
+              >
+                {item.body}
+              </p>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 10,
+                  gap: 12,
+                }}
+              >
+                <span className="ios-meta" style={{ padding: 0 }}>
                   {item.wordCount} words · {new Date(item.createdAt).toLocaleDateString("en-US")}
-                </p>
+                </span>
                 <button
                   type="button"
                   onClick={() => deleteSensation(item.id)}
-                  className="text-xs text-red-400"
+                  className="ios-btn-plain"
+                  style={{ color: "#ff453a", minHeight: 32, fontSize: "var(--ios-footnote-size)" }}
                 >
                   Delete
                 </button>
               </div>
-            </li>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
-    </div>
+    </IosPage>
   );
 }

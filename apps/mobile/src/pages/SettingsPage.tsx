@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { deleteAccountApi, getMe, logoutApi } from "../api/client";
 import { authTokenStore } from "../lib/authToken";
 import { getApiBaseUrl } from "../lib/apiBase";
+import { IosLargeTitle, IosPage, IosSection } from "../components/ios/IosChrome";
 
 export function SettingsPage() {
   const navigate = useNavigate();
@@ -34,32 +35,64 @@ export function SettingsPage() {
   }
 
   return (
-    <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">Settings</h1>
-      <p className="mt-2 text-sm text-stone-400">Signed in as {email}</p>
-      {memberSince && (
-        <p className="mt-1 text-sm text-stone-500">Member since {memberSince}</p>
-      )}
-      <section className="mt-8 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
-        <p className="text-xs uppercase tracking-wider text-stone-500">API server</p>
-        <p className="mt-2 font-mono text-sm text-stone-300">{getApiBaseUrl() || "(same origin)"}</p>
-      </section>
-      <button
-        type="button"
-        onClick={signOut}
-        disabled={loading}
-        className="mt-6 rounded-lg border border-stone-700 px-4 py-2 text-sm text-stone-200 disabled:opacity-50"
+    <IosPage>
+      <IosLargeTitle title="Me" subtitle="Account and preferences." />
+
+      <IosSection header="Profile">
+        <div className="ios-row">
+          <span className="ios-row__main">
+            <span className="ios-row__label">Email</span>
+            <span className="ios-row__detail">{email || "…"}</span>
+          </span>
+        </div>
+        {memberSince && (
+          <div className="ios-row">
+            <span className="ios-row__main">
+              <span className="ios-row__label">Member since</span>
+              <span className="ios-row__detail">{memberSince}</span>
+            </span>
+          </div>
+        )}
+      </IosSection>
+
+      <IosSection
+        header="Developer"
+        footer="API endpoint used by this app build."
       >
-        Sign out
-      </button>
-      <button
-        type="button"
-        onClick={deleteAccount}
-        disabled={loading}
-        className="mt-8 rounded-lg border border-red-900/50 px-4 py-2 text-sm text-red-400 disabled:opacity-50"
+        <div className="ios-row">
+          <span className="ios-row__main">
+            <span className="ios-row__label">Server</span>
+            <span className="ios-row__detail" style={{ fontFamily: "ui-monospace, monospace" }}>
+              {getApiBaseUrl() || "Same origin"}
+            </span>
+          </span>
+        </div>
+      </IosSection>
+
+      <IosSection>
+        <button
+          type="button"
+          onClick={signOut}
+          disabled={loading}
+          className="ios-row ios-row--brand"
+        >
+          <span className="ios-row__label">Sign out</span>
+        </button>
+      </IosSection>
+
+      <IosSection
+        header="Danger zone"
+        footer="Permanently removes your sensations, matches, and contact data."
       >
-        Delete account
-      </button>
-    </div>
+        <button
+          type="button"
+          onClick={deleteAccount}
+          disabled={loading}
+          className="ios-row ios-row--destructive"
+        >
+          <span className="ios-row__label">Delete account</span>
+        </button>
+      </IosSection>
+    </IosPage>
   );
 }

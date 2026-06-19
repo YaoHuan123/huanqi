@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/client";
+import { IosChevron, IosEmptyState, IosLargeTitle, IosPage } from "../components/ios/IosChrome";
 
 type MatchItem = {
   id: string;
@@ -21,31 +22,33 @@ export function MatchesPage() {
   }, []);
 
   return (
-    <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">Your matches</h1>
+    <IosPage>
+      <IosLargeTitle title="Matches" subtitle="People who resonate with your sensations." />
+
       {loading ? (
-        <p className="mt-10 text-sm text-stone-500">Loading…</p>
+        <p className="ios-loading">Loading…</p>
       ) : matches.length === 0 ? (
-        <p className="mt-10 text-sm text-stone-400">
-          No matches yet. <Link to="/write" className="text-violet-300">Write a sensation</Link>
-        </p>
+        <IosEmptyState
+          title="No matches yet"
+          body="Publish a sensation and we'll look for resonance."
+          actionLabel="Write a sensation"
+          actionTo="/write"
+        />
       ) : (
-        <ul className="mt-8 space-y-4">
+        <div className="ios-group" style={{ margin: "8px 16px 0" }}>
           {matches.map((match) => (
-            <li key={match.id}>
-              <Link
-                to={`/matches/${match.id}`}
-                className="block rounded-xl border border-stone-800 bg-stone-900/40 p-5"
-              >
-                <span className="text-sm font-medium text-violet-300">
+            <Link key={match.id} to={`/matches/${match.id}`} className="ios-row ios-row--link">
+              <span className="ios-row__main">
+                <span className="ios-row__label" style={{ color: "var(--shell-brand)" }}>
                   {match.similarityPercent}% resonance
                 </span>
-                <p className="mt-3 text-sm text-stone-300">{match.preview}</p>
-              </Link>
-            </li>
+                <span className="ios-row__detail">{match.preview}</span>
+              </span>
+              <IosChevron />
+            </Link>
           ))}
-        </ul>
+        </div>
       )}
-    </div>
+    </IosPage>
   );
 }

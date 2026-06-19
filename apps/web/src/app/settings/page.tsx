@@ -19,15 +19,15 @@ export default async function SettingsPage() {
 
   return (
     <div className="app-page-content">
-      <Link href="/" className="text-sm text-stone-500 hover:text-stone-300">
+      <Link href="/" className="shell-back-link">
         ← Home
       </Link>
 
-      <h1 className="mt-8 text-2xl font-semibold">Settings</h1>
-      <p className="mt-2 text-sm text-stone-400">Signed in as {user.email}</p>
+      <h1 className="shell-page-title mt-8">Settings</h1>
+      <p className="shell-page-desc">Signed in as {user.email}</p>
 
-      <section className="mt-10 space-y-3 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
-        <p className="text-xs uppercase tracking-wider text-stone-500">Contact method</p>
+      <section className="shell-card shell-stack-md" style={{ marginTop: "2.5rem" }}>
+        <p className="shell-section-label">Contact method</p>
         <p className="text-sm text-stone-300">{user.email}</p>
         <p className="text-sm text-stone-500">
           HuanQi only uses your login email. After you unlock and confirm a match, you can choose
@@ -37,9 +37,9 @@ export default async function SettingsPage() {
 
       <ServerUrlForm />
 
-      <section className="mt-6 space-y-4 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
+      <section className="shell-card shell-stack-md" style={{ marginTop: "1.5rem" }}>
         <div>
-          <p className="text-xs uppercase tracking-wider text-stone-500">Account</p>
+          <p className="shell-section-label">Account</p>
           <p className="mt-1 text-sm text-stone-300">
             Member since {user.createdAt.toLocaleDateString("en-US")}
           </p>

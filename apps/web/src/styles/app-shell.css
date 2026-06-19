@@ -212,3 +212,262 @@ html.app-native .app-shell-phone {
   display: grid;
   gap: 14px;
 }
+
+/* ── Scheme A components ── */
+
+.shell-page-title {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.shell-page-desc {
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--shell-label-2);
+}
+
+.shell-section-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--shell-label-3);
+}
+
+.shell-link {
+  color: var(--shell-brand-light);
+  text-decoration: none;
+}
+
+.shell-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.shell-back-link {
+  font-size: 0.875rem;
+  color: var(--shell-label-3);
+  text-decoration: none;
+}
+
+.shell-back-link:hover {
+  color: var(--shell-label-2);
+}
+
+.shell-card {
+  border-radius: var(--shell-radius-md);
+  border: 1px solid var(--shell-separator);
+  background: color-mix(in srgb, var(--shell-bg-elevated) 60%, transparent);
+  padding: 1.25rem;
+}
+
+.shell-match-card {
+  display: block;
+  border-radius: var(--shell-radius-md);
+  border: 1px solid var(--shell-separator);
+  background: color-mix(in srgb, var(--shell-bg-elevated) 70%, transparent);
+  padding: 1.25rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.shell-match-card:hover {
+  border-color: var(--shell-brand-ring);
+}
+
+.shell-match-score {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--shell-brand-light);
+}
+
+.shell-match-preview {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--shell-label-2);
+}
+
+.shell-match-meta {
+  font-size: 0.6875rem;
+  color: var(--shell-label-3);
+}
+
+.shell-sensation-block {
+  border-radius: var(--shell-radius-md);
+  border: 1px solid var(--shell-separator);
+  background: color-mix(in srgb, var(--shell-bg-elevated) 50%, transparent);
+  padding: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--shell-label-1);
+  white-space: pre-wrap;
+}
+
+.shell-unlock-panel {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border-radius: var(--shell-radius-md);
+  border: 1px solid color-mix(in srgb, var(--shell-brand) 35%, transparent);
+  background: var(--shell-brand-soft);
+}
+
+.shell-unlock-panel p {
+  margin: 0 0 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: #ede9fe;
+}
+
+.shell-unlock-note {
+  margin: 0.5rem 0 0;
+  font-size: 0.6875rem;
+  text-align: center;
+  color: var(--shell-label-3);
+}
+
+.shell-empty-state {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  border-radius: var(--shell-radius-md);
+  border: 1px solid var(--shell-separator);
+  background: color-mix(in srgb, var(--shell-bg-elevated) 40%, transparent);
+  font-size: 0.875rem;
+  color: var(--shell-label-2);
+}
+
+.shell-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: var(--shell-radius-sm);
+  background: var(--shell-brand-deep);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.shell-btn-primary:hover:not(:disabled) {
+  background: var(--shell-brand);
+}
+
+.shell-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shell-btn-primary--full {
+  width: 100%;
+}
+
+.shell-btn-apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: none;
+  border-radius: var(--shell-radius-sm);
+  background: #fff;
+  color: #000;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.shell-btn-apple:hover:not(:disabled) {
+  background: #e7e5e4;
+}
+
+.shell-btn-apple:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shell-field-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--shell-label-2);
+}
+
+.shell-word-count--ok {
+  color: var(--shell-success);
+}
+
+.shell-word-count--warn {
+  color: var(--shell-warning);
+}
+
+.shell-textarea,
+.shell-input {
+  width: 100%;
+  border-radius: var(--shell-radius-md);
+  border: 1px solid color-mix(in srgb, var(--shell-label-3) 40%, transparent);
+  background: var(--shell-bg-muted);
+  color: var(--shell-label-1);
+  font-size: 0.875rem;
+  font-family: inherit;
+  outline: none;
+}
+
+.shell-textarea {
+  padding: 0.875rem 1rem;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.shell-input {
+  padding: 0.5rem 0.75rem;
+}
+
+.shell-textarea:focus,
+.shell-input:focus {
+  box-shadow: 0 0 0 2px var(--shell-brand-ring);
+}
+
+.shell-status-error {
+  font-size: 0.875rem;
+  color: var(--shell-danger);
+}
+
+.shell-status-success {
+  font-size: 0.875rem;
+  color: var(--shell-success);
+}
+
+.shell-list {
+  margin: 2rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.shell-stack-lg {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.shell-stack-md {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}

@@ -97,8 +97,8 @@ export default function WritePage() {
 
   return (
     <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">Write your sensation</h1>
-      <p className="mt-2 max-w-xl text-sm leading-relaxed text-stone-400">
+      <h1 className="shell-page-title">Write your sensation</h1>
+      <p className="shell-page-desc">
         Describe a surreal bodily or perceptual experience in your own words. English only.
         Contact details live in Settings. After unlock and confirm, you share your login email only.
         {quota && !quota.unlimited && (
@@ -116,15 +116,15 @@ export default function WritePage() {
         </p>
       )}
 
-      <form onSubmit={onSubmit} className="mt-8 space-y-6">
+      <form onSubmit={onSubmit} className="shell-stack-lg">
         <label className="block space-y-2">
-          <div className="flex items-center justify-between text-sm text-stone-400">
+          <div className="shell-field-label">
             <span>Sensation record</span>
             <span
               className={
                 wordCount < SENSATION_MIN_WORDS || wordCount > SENSATION_MAX_WORDS
-                  ? "text-amber-400"
-                  : "text-emerald-400"
+                  ? "shell-word-count--warn"
+                  : "shell-word-count--ok"
               }
             >
               {wordCount} / {SENSATION_MAX_WORDS} words (min {SENSATION_MIN_WORDS})
@@ -138,19 +138,15 @@ export default function WritePage() {
             value={body}
             onChange={(e) => setBody(e.target.value)}
             rows={14}
-            className="w-full resize-y rounded-xl border border-stone-700 bg-stone-900 px-4 py-3 text-stone-100 outline-none ring-violet-400 focus:ring-2"
+            className="shell-textarea"
             placeholder="It felt like my skin remembered a room that no longer exists..."
           />
         </label>
 
-        {error && <p className="text-sm text-red-400">{error}</p>}
-        {success && <p className="text-sm text-emerald-400">{success}</p>}
+        {error && <p className="shell-status-error">{error}</p>}
+        {success && <p className="shell-status-success">{success}</p>}
 
-        <button
-          type="submit"
-          disabled={loading || atDailyLimit}
-          className="rounded-lg bg-violet-600 px-5 py-2.5 font-medium text-white hover:bg-violet-500 disabled:opacity-50"
-        >
+        <button type="submit" disabled={loading || atDailyLimit} className="shell-btn-primary">
           {loading ? "Publishing…" : "Publish to the resonance pool"}
         </button>
       </form>

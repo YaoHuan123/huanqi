@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { en } from "@huanqi/shared";
 
 type MatchDetail = {
   id: string;
@@ -118,8 +119,8 @@ export default function MatchDetailPage() {
   if (!match) {
     return (
       <div className="app-page-content">
-        <p className="text-sm text-red-400">{error ?? "Match not found"}</p>
-        <Link href="/matches" className="mt-4 inline-block text-sm text-violet-300">
+        <p className="shell-status-error">{error ?? "Match not found"}</p>
+        <Link href="/matches" className="shell-link mt-4 inline-block text-sm">
           ← Back to matches
         </Link>
       </div>
@@ -128,58 +129,55 @@ export default function MatchDetailPage() {
 
   return (
     <div className="app-page-content">
-      <Link href="/matches" className="text-sm text-stone-500 hover:text-stone-300">
+      <Link href="/matches" className="shell-back-link">
         ← Back to matches
       </Link>
 
       <div className="mt-6 flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-semibold">{match.similarityPercent}% resonance</h1>
-        <span className="text-xs text-stone-500">
+        <h1 className="shell-page-title">
+          <span className="shell-match-score">{match.similarityPercent}%</span> resonance
+        </h1>
+        <span className="shell-match-meta">
           {!match.my.unlocked ? "Locked" : match.my.bothShared ? "Email exchanged" : "Unlocked"}
         </span>
       </div>
 
-      <section className="mt-8 space-y-3">
-        <h2 className="text-sm font-medium uppercase tracking-wider text-stone-500">
-          Their sensation
-        </h2>
-        <article className="rounded-xl border border-stone-800 bg-stone-900/40 p-5 text-sm leading-relaxed text-stone-200 whitespace-pre-wrap">
-          {match.otherSensation.body}
-        </article>
+      <section className="shell-stack-md">
+        <h2 className="shell-section-label">Their sensation</h2>
+        <article className="shell-sensation-block">{match.otherSensation.body}</article>
         {!match.otherSensation.full && (
-          <p className="text-xs text-stone-500">Pay to unlock to read the full sensation.</p>
+          <p className="shell-match-meta">Pay to unlock to read the full sensation.</p>
         )}
       </section>
 
       {match.my.unlocked && (
-        <section className="mt-8 space-y-3">
-          <h2 className="text-sm font-medium uppercase tracking-wider text-stone-500">
-            Your sensation in this match
-          </h2>
-          <article className="rounded-xl border border-stone-800 bg-stone-900/20 p-5 text-sm leading-relaxed text-stone-400 whitespace-pre-wrap">
+        <section className="shell-stack-md">
+          <h2 className="shell-section-label">Your sensation in this match</h2>
+          <article className="shell-sensation-block" style={{ color: "var(--shell-label-2)" }}>
             {match.selfSensation.body}
           </article>
         </section>
       )}
 
       {match.canUnlock && (
-        <div className="mt-8 space-y-3 rounded-xl border border-violet-900/40 bg-violet-950/20 p-5">
-          <p className="text-sm text-violet-100">
+        <div className="shell-unlock-panel">
+          <p>
             Unlock to read their full sensation and decide if this match is right for you.
           </p>
           <button
             type="button"
             onClick={unlock}
             disabled={actionLoading}
-            className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+            className="shell-btn-primary shell-btn-primary--full"
           >
-            {actionLoading ? "Processing…" : "Pay to unlock (free web beta)"}
+            {actionLoading ? "Processing…" : `${en.matches.unlock} (free web beta)`}
           </button>
+          <p className="shell-unlock-note">Apple In-App Purchase on iOS</p>
         </div>
       )}
 
       {match.canConfirm && (
-        <div className="mt-8 space-y-4 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
+        <div className="shell-card shell-stack-md" style={{ marginTop: "2rem" }}>
           <p className="text-sm text-stone-200">Is this the resonance you were looking for?</p>
           <button
             type="button"
@@ -193,7 +191,7 @@ export default function MatchDetailPage() {
       )}
 
       {match.canShare && (
-        <div className="mt-8 space-y-4 rounded-xl border border-stone-800 bg-stone-900/40 p-5">
+        <div className="shell-card shell-stack-md" style={{ marginTop: "2rem" }}>
           <p className="text-sm text-stone-300">
             Share your login email with this match only. The other person must share theirs before
             you can see it.
@@ -205,7 +203,7 @@ export default function MatchDetailPage() {
             type="button"
             onClick={shareContact}
             disabled={actionLoading}
-            className="rounded-lg bg-violet-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+            className="shell-btn-primary"
           >
             {actionLoading ? "Sharing…" : "Share my login email in this match"}
           </button>
@@ -225,7 +223,7 @@ export default function MatchDetailPage() {
         </section>
       )}
 
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="shell-status-error mt-4">{error}</p>}
 
       <div className="mt-10 flex flex-wrap items-center gap-4">
         <button

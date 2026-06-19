@@ -1,4 +1,6 @@
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
+
+const TAB_ROUTES = ["/write", "/library", "/matches", "/settings"];
 
 const tabs = [
   { to: "/write", label: "Write", icon: "write" },
@@ -6,6 +8,14 @@ const tabs = [
   { to: "/matches", label: "Matches", icon: "matches" },
   { to: "/settings", label: "Me", icon: "me" },
 ] as const;
+
+function isTabRoute(pathname: string) {
+  return TAB_ROUTES.includes(pathname);
+}
+
+function isSubpageRoute(pathname: string) {
+  return /^\/matches\/[^/]+$/.test(pathname);
+}
 
 function TabIcon({ name, active }: { name: string; active: boolean }) {
   const stroke = active ? "var(--shell-brand)" : "currentColor";
@@ -62,32 +72,46 @@ function TabIcon({ name, active }: { name: string; active: boolean }) {
 }
 
 export function AppShell() {
+  const { pathname } = useLocation();
+  const withTabs = isTabRoute(pathname);
+  const isSubpage = isSubpageRoute(pathname);
+
   return (
     <div className="app-root">
       <div className="app-shell-phone">
-        <div className="app-shell-body app-shell-body--tabs">
-          <div className="shell-scroll-y">
-            <Outlet />
+        <div className={`app-shell-body${withTabs ? " app-shell-body--tabs" : ""}`}>
+          {isSubpage ? (
+            <div className="app-subpage">
+              <div className="app-subpage-body shell-scroll-y">
+                <Outlet />
+              </div>
+            </div>
+          ) : (
+            <div className="shell-scroll-y">
+              <Outlet />
+            </div>
+          )}
+        </div>
+        {withTabs && (
+          <div className="app-shell-tabbar-outer">
+            <nav className="app-shell-tabbar" aria-label="Main">
+              {tabs.map((tab) => (
+                <NavLink
+                  key={tab.to}
+                  to={tab.to}
+                  className={({ isActive }) => (isActive ? "app-shell-tab active" : "app-shell-tab")}
+                >
+                  {({ isActive }) => (
+                    <>
+                      <TabIcon name={tab.icon} active={isActive} />
+                      <span>{tab.label}</span>
+                    </>
+                  )}
+                </NavLink>
+              ))}
+            </nav>
           </div>
-        </div>
-        <div className="app-shell-tabbar-outer">
-          <nav className="app-shell-tabbar" aria-label="Main">
-            {tabs.map((tab) => (
-              <NavLink
-                key={tab.to}
-                to={tab.to}
-                className={({ isActive }) => (isActive ? "app-shell-tab active" : "app-shell-tab")}
-              >
-                {({ isActive }) => (
-                  <>
-                    <TabIcon name={tab.icon} active={isActive} />
-                    <span>{tab.label}</span>
-                  </>
-                )}
-              </NavLink>
-            ))}
-          </nav>
-        </div>
+        )}
       </div>
     </div>
   );

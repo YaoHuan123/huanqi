@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HuanQi 界面备选方案 · PM 设计评审</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: "DM Sans", -apple-system, sans-serif;
+      background: #111;
+      color: #e7e5e4;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── 评审页布局 ── */
+    .review-page {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .review-header {
+      margin-bottom: 40px;
+      border-bottom: 1px solid #292524;
+      padding-bottom: 32px;
+    }
+
+    .review-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #a78bfa;
+      margin-bottom: 12px;
+    }
+
+    .review-header h1 {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .review-header p {
+      margin-top: 10px;
+      max-width: 720px;
+      color: #a8a29e;
+      font-size: 15px;
+    }
+
+    .design-brief {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .brief-item {
+      padding: 14px 16px;
+      border-radius: 12px;
+      background: #1c1917;
+      border: 1px solid #292524;
+    }
+
+    .brief-item strong {
+      display: block;
+      font-size: 12px;
+      color: #78716c;
+      margin-bottom: 4px;
+    }
+
+    .brief-item span { font-size: 14px; }
+
+    /* ── 方案选择器 ── */
+    .variant-tabs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .variant-tabs { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .variant-tab {
+      padding: 16px;
+      border-radius: 14px;
+      border: 2px solid #292524;
+      background: #1c1917;
+      cursor: pointer;
+      text-align: left;
+      font-family: inherit;
+      color: inherit;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .variant-tab:hover { border-color: #44403c; }
+
+    .variant-tab.active {
+      border-color: var(--tab-accent, #8b5cf6);
+      background: color-mix(in srgb, var(--tab-accent, #8b5cf6) 8%, #1c1917);
+    }
+
+    .variant-tab .code {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: var(--tab-accent, #a78bfa);
+    }
+
+    .variant-tab .name {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 4px 0 2px;
+    }
+
+    .variant-tab .tagline {
+      font-size: 12px;
+      color: #78716c;
+    }
+
+    .variant-tab[data-v="a"] { --tab-accent: #8b5cf6; }
+    .variant-tab[data-v="b"] { --tab-accent: #818cf8; }
+    .variant-tab[data-v="c"] { --tab-accent: #d4a574; }
+    .variant-tab[data-v="d"] { --tab-accent: #5eead4; }
+
+    /* ── 主展示区 ── */
+    .showcase-row {
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+
+    @media (max-width: 1100px) {
+      .showcase-row { grid-template-columns: 1fr; justify-items: center; }
+    }
+
+    /* ── iPhone ── */
+    .phone-wrap { position: sticky; top: 24px; }
+
+    .iphone {
+      width: 375px;
+      background: linear-gradient(160deg, #444 0%, #222 100%);
+      border-radius: 52px;
+      padding: 10px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+      position: relative;
+    }
+
+    .island {
+      position: absolute;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 34px;
+      background: #000;
+      border-radius: 20px;
+      z-index: 50;
+    }
+
+    .phone-screen {
+      height: 812px;
+      border-radius: 42px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      transition: background 0.4s, color 0.4s;
+    }
+
+    /* ── 主题变量 ── */
+    .phone-screen[data-theme="a"] {
+      --bg: #0c0a09;
+      --bg-card: #1c1917;
+      --bg-input: #292524;
+      --text: #fafaf9;
+      --text-2: #a8a29e;
+      --text-3: #78716c;
+      --accent: #8b5cf6;
+      --accent-2: #7c3aed;
+      --accent-soft: rgba(139,92,246,0.14);
+      --border: rgba(255,255,255,0.08);
+      --radius: 14px;
+      --font-display: "DM Sans", sans-serif;
+      --font-body: "DM Sans", sans-serif;
+      --font-meta: "DM Sans", sans-serif;
+      --nav-style: bottom;
+      --hero-style: centered;
+    }
+
+    .phone-screen[data-theme="b"] {
+      --bg: #0f0e17;
+      --bg-card: rgba(255,255,255,0.04);
+      --bg-input: rgba(255,255,255,0.06);
+      --text: #f0eef8;
+      --text-2: #a09cb8;
+      --text-3: #6b6580;
+      --accent: #a5b4fc;
+      --accent-2: #818cf8;
+      --accent-soft: rgba(129,140,248,0.12);
+      --border: rgba(165,180,252,0.12);
+      --radius: 20px;
+      --font-display: "Cormorant Garamond", serif;
+      --font-body: "DM Sans", sans-serif;
+      --font-meta: "DM Sans", sans-serif;
+      --nav-style: floating;
+      --hero-style: poetic;
+      --mist: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(129,140,248,0.18), transparent),
+              radial-gradient(ellipse 60% 40% at 80% 100%, rgba(167,139,250,0.1), transparent);
+    }
+
+    .phone-screen[data-theme="c"] {
+      --bg: #f5f0e8;
+      --bg-card: #fff;
+      --bg-input: #ebe4d9;
+      --text: #1a1612;
+      --text-2: #5c534a;
+      --text-3: #8a7f74;
+      --accent: #8b6914;
+      --accent-2: #6b5010;
+      --accent-soft: rgba(139,105,20,0.08);
+      --border: rgba(26,22,18,0.1);
+      --radius: 4px;
+      --font-display: "Instrument Serif", serif;
+      --font-body: "Instrument Serif", serif;
+      --font-meta: "IBM Plex Mono", monospace;
+      --nav-style: top;
+      --hero-style: editorial;
+    }
+
+    .phone-screen[data-theme="d"] {
+      --bg: #0a0f0e;
+      --bg-card: #111917;
+      --bg-input: #0d1211;
+      --text: #e8f0ee;
+      --text-2: #7a9490;
+      --text-3: #4a6360;
+      --accent: #5eead4;
+      --accent-2: #2dd4bf;
+      --accent-soft: rgba(94,234,212,0.08);
+      --border: rgba(94,234,212,0.12);
+      --radius: 8px;
+      --font-display: "DM Sans", sans-serif;
+      --font-body: "DM Sans", sans-serif;
+      --font-meta: "IBM Plex Mono", monospace;
+      --nav-style: minimal;
+      --hero-style: clinical;
+    }
+
+    .phone-screen {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+    }
+
+    .phone-screen::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--mist, none);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .status-bar {
+      position: relative;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      padding: 14px 24px 0;
+      font-size: 14px;
+      font-weight: 600;
+      font-family: -apple-system, sans-serif;
+      flex-shrink: 0;
+    }
+
+    .app-content {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 1;
+    }
+
+    .screen-view { display: none; flex: 1; min-height: 0; flex-direction: column; }
+    .screen-view.active { display: flex; }
+
+    .scroll-area {
+      flex: 1;
+      overflow-y: auto;
+      padding: 8px 20px 20px;
+      scrollbar-width: none;
+    }
+    .scroll-area::-webkit-scrollbar { display: none; }
+
+    /* ── 通用组件 ── */
+    .brand {
+      font-family: var(--font-display);
+      color: var(--accent);
+    }
+
+    .hero-centered { text-align: center; padding: 40px 12px 24px; }
+    .hero-poetic { text-align: center; padding: 48px 16px 28px; }
+    .hero-editorial { padding: 24px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
+    .hero-clinical { padding: 32px 0 24px; }
+
+    .brand-lg {
+      font-size: 32px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-poetic {
+      font-size: 42px;
+      font-weight: 400;
+      font-style: italic;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+
+    .brand-editorial {
+      font-size: 36px;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+
+    .brand-clinical {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-family: var(--font-meta);
+    }
+
+    .tagline { font-size: 13px; color: var(--text-2); margin-top: 8px; line-height: 1.5; }
+    .tagline-poetic { font-size: 15px; font-style: italic; color: var(--text-2); max-width: 260px; margin: 12px auto 0; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+    }
+
+    .card-title { font-size: 16px; font-weight: 600; font-family: var(--font-display); }
+    .card-hint { font-size: 12px; color: var(--text-2); margin-top: 6px; line-height: 1.45; }
+
+    .btn-apple {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 13px; border: none; border-radius: var(--radius);
+      background: #fff; color: #000; font-size: 15px; font-weight: 500;
+      font-family: -apple-system, sans-serif; margin-top: 14px;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 12px 20px; border: none; border-radius: var(--radius);
+      background: var(--accent-2); color: var(--bg);
+      font-size: 14px; font-weight: 600; font-family: var(--font-body);
+    }
+
+    [data-theme="a"] .btn-primary,
+    [data-theme="b"] .btn-primary { color: #fff; }
+
+    .btn-outline {
+      padding: 11px 18px; border: 1px solid var(--border); border-radius: var(--radius);
+      background: transparent; color: var(--text); font-size: 13px; font-family: var(--font-body);
+    }
+
+    .btn-ghost {
+      padding: 10px 0; border: none; background: none;
+      color: var(--accent); font-size: 13px; font-family: var(--font-meta);
+      text-decoration: underline; text-underline-offset: 3px;
+    }
+
+    .field-label {
+      display: flex; justify-content: space-between;
+      font-size: 11px; font-family: var(--font-meta);
+      color: var(--text-3); text-transform: uppercase;
+      letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+
+    .textarea {
+      width: 100%; min-height: 160px; padding: 14px;
+      border-radius: var(--radius); border: 1px solid var(--border);
+      background: var(--bg-input); color: var(--text);
+      font-size: 14px; line-height: 1.6; font-family: var(--font-body);
+      resize: none;
+    }
+
+    .page-h1 {
+      font-family: var(--font-display);
+      font-size: 24px; font-weight: 600;
+    }
+
+    .page-desc { font-size: 13px; color: var(--text-2); margin-top: 6px; line-height: 1.5; }
+
+    .match-item {
+      margin-top: 14px; padding: 16px;
+      border-radius: var(--radius); border: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    .match-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      font-family: var(--font-meta); font-size: 11px;
+    }
+
+    .match-score { color: var(--accent); font-weight: 500; }
+    .match-body { margin-top: 10px; font-size: 14px; line-height: 1.55; color: var(--text-2); }
+
+    .unlock-panel {
+      margin-top: 16px; padding: 16px;
+      border-radius: var(--radius);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+      background: var(--accent-soft);
+    }
+
+    .progress-bar {
+      height: 3px; background: var(--border); border-radius: 2px; margin: 16px 0 8px;
+    }
+    .progress-fill { height: 100%; width: 71%; background: var(--accent); border-radius: 2px; }
+
+    .resonance-ring {
+      width: 72px; height: 72px; border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-meta); font-size: 16px; font-weight: 500;
+      color: var(--accent); margin: 0 auto 16px;
+      box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent);
+    }
+
+    /* ── 导航 ── */
+    .nav-bottom {
+      flex-shrink: 0;
+      display: flex; justify-content: space-around;
+      padding: 6px 8px 28px;
+      background: color-mix(in srgb, var(--bg) 92%, transparent);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+    }
+
+    .nav-floating-wrap {
+      flex-shrink: 0;
+      padding: 0 24px 28px;
+      display: flex; justify-content: center;
+    }
+
+    .nav-floating {
+      display: flex; gap: 4px; padding: 6px;
+      background: color-mix(in srgb, var(--bg-card) 90%, transparent);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+    }
+
+    .nav-top {
+      flex-shrink: 0;
+      display: flex; gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      font-family: var(--font-meta);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .nav-minimal {
+      flex-shrink: 0;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 8px 20px 24px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-meta);
+      font-size: 10px;
+      color: var(--text-3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .nav-item {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+      padding: 8px 4px; border: none; background: none;
+      color: var(--text-3); font-size: 10px; font-weight: 600;
+      font-family: inherit; cursor: pointer;
+    }
+
+    .nav-floating .nav-item { flex: none; padding: 8px 16px; border-radius: 999px; font-size: 11px; }
+    .nav-top .nav-item { flex: none; padding: 12px 14px; border-bottom: 2px solid transparent; }
+    .nav-minimal .nav-item { flex: none; padding: 4px 0; border: none; font-size: 10px; }
+
+    .nav-item.active { color: var(--accent); }
+    .nav-top .nav-item.active { border-bottom-color: var(--accent); }
+
+    .nav-floating .nav-item.active {
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    .home-bar {
+      position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+      width: 130px; height: 4px; border-radius: 2px;
+      background: color-mix(in srgb, var(--text) 30%, transparent);
+      z-index: 60;
+    }
+
+    /* ── 屏幕切换 ── */
+    .screen-switch {
+      display: flex; gap: 6px; flex-wrap: wrap;
+      margin-top: 16px; justify-content: center;
+    }
+
+    .screen-switch button {
+      padding: 6px 12px; border-radius: 999px;
+      border: 1px solid #444; background: #1c1917;
+      color: #a8a29e; font-size: 12px; font-family: inherit; cursor: pointer;
+    }
+
+    .screen-switch button.active {
+      border-color: #8b5cf6; color: #c4b5fd; background: rgba(139,92,246,0.1);
+    }
+
+    /* ── PM 分析面板 ── */
+    .pm-panel h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .pm-panel .subtitle { font-size: 14px; color: #78716c; margin-bottom: 24px; }
+
+    .pm-score-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .pm-score {
+      padding: 12px; border-radius: 10px;
+      background: #1c1917; border: 1px solid #292524; text-align: center;
+    }
+
+    .pm-score .val { font-size: 22px; font-weight: 600; color: var(--score-color, #a78bfa); }
+    .pm-score .lbl { font-size: 11px; color: #78716c; margin-top: 2px; }
+
+    .pm-section {
+      margin-bottom: 20px; padding: 18px;
+      border-radius: 12px; background: #1c1917; border: 1px solid #292524;
+    }
+
+    .pm-section h3 {
+      font-size: 13px; font-weight: 600; color: #a78bfa;
+      margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+    }
+
+    .pm-section ul { list-style: none; display: grid; gap: 8px; }
+    .pm-section li {
+      font-size: 13px; color: #d6d3d1; padding-left: 16px; position: relative;
+    }
+    .pm-section li::before {
+      content: "·"; position: absolute; left: 4px; color: #78716c;
+    }
+
+    .pm-section.pros li::before { content: "+"; color: #34d399; }
+    .pm-section.cons li::before { content: "−"; color: #f87171; }
+
+    .compare-table {
+      width: 100%; border-collapse: collapse; font-size: 13px;
+      margin-top: 48px;
+    }
+
+    .compare-table th, .compare-table td {
+      padding: 12px 14px; text-align: left;
+      border-bottom: 1px solid #292524;
+    }
+
+    .compare-table th { color: #78716c; font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .compare-table td:first-child { color: #a8a29e; }
+    .compare-table .best { color: #34d399; font-weight: 600; }
+
+    .recommendation {
+      margin-top: 32px; padding: 20px 24px;
+      border-radius: 14px;
+      border: 1px solid rgba(52,211,153,0.25);
+      background: rgba(52,211,153,0.06);
+    }
+
+    .recommendation h3 { font-size: 15px; color: #34d399; margin-bottom: 8px; }
+    .recommendation p { font-size: 14px; color: #d6d3d1; line-height: 1.6; }
+
+    .hidden { display: none !important; }
+
+    /* theme-specific hero visibility */
+    [data-theme="a"] .hero-b, [data-theme="a"] .hero-c, [data-theme="a"] .hero-d { display: none; }
+    [data-theme="b"] .hero-a, [data-theme="b"] .hero-c, [data-theme="b"] .hero-d { display: none; }
+    [data-theme="c"] .hero-a, [data-theme="c"] .hero-b, [data-theme="c"] .hero-d { display: none; }
+    [data-theme="d"] .hero-a, [data-theme="d"] .hero-b, [data-theme="d"] .hero-c { display: none; }
+
+    [data-theme="a"] .nav-b, [data-theme="a"] .nav-c, [data-theme="a"] .nav-d { display: none; }
+    [data-theme="b"] .nav-a, [data-theme="b"] .nav-c, [data-theme="b"] .nav-d { display: none; }
+    [data-theme="c"] .nav-a, [data-theme="c"] .nav-b, [data-theme="c"] .nav-d { display: none; }
+    [data-theme="d"] .nav-a, [data-theme="d"] .nav-b, [data-theme="d"] .nav-c { display: none; }
+
+    .editorial-rule {
+      width: 40px; height: 1px; background: var(--accent); margin: 12px 0;
+    }
+
+    .clinical-step {
+      font-family: var(--font-meta); font-size: 10px;
+      color: var(--text-3); letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .wave-deco {
+      height: 40px; margin: 12px 0;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.15; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 40'%3E%3Cpath d='M0 20 Q25 5 50 20 T100 20 T150 20 T200 20' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") center/contain no-repeat;
+    }
+  </style>
+</head>
+<body>
+  <div class="review-page">
+    <header class="review-header">
+      <div class="review-tag">Product Design Review · V1 iOS</div>
+      <h1>HuanQi 界面备选方案</h1>
+      <p>面向高敏感 / 解离 / 梦境体验人群的工具类产品。设计必须传递「安静、非社交、可信任」，同时满足 App Store Utilities 类目审核。以下四套方案在信息架构一致的前提下，探索不同的视觉叙事。</p>
+      <div class="design-brief">
+        <div class="brief-item"><strong>核心任务</strong><span>写体感 → 等匹配 → 付费解锁 → 场外联系</span></div>
+        <div class="brief-item"><strong>禁区</strong><span>无头像、无点赞、无聊天、无标签流</span></div>
+        <div class="brief-item"><strong>用户心智</strong><span>「工具」而非「交友 App」</span></div>
+        <div class="brief-item"><strong>主场景</strong><span>深夜独自记录、收到 APNs 后回访</span></div>
+      </div>
+    </header>
+
+    <!-- 方案 Tab -->
+    <div class="variant-tabs">
+      <button class="variant-tab active" data-v="a" type="button">
+        <span class="code">方案 A</span>
+        <span class="name">Obsidian 紫晶</span>
+        <span class="tagline">现有方向进化 · 工具感强</span>
+      </button>
+      <button class="variant-tab" data-v="b" type="button">
+        <span class="code">方案 B</span>
+        <span class="name">Ethereal 雾境</span>
+        <span class="tagline">诗意梦幻 · 情感共鸣</span>
+      </button>
+      <button class="variant-tab" data-v="c" type="button">
+        <span class="code">方案 C</span>
+        <span class="name">Archive 档案</span>
+        <span class="tagline">文学纸感 · 私密信件</span>
+      </button>
+      <button class="variant-tab" data-v="d" type="button">
+        <span class="code">方案 D</span>
+        <span class="name">Signal Clinical</span>
+        <span class="tagline">极简临床 · 语义工具</span>
+      </button>
+    </div>
+
+    <div class="showcase-row">
+      <!-- 手机预览 -->
+      <div class="phone-wrap">
+        <div class="iphone">
+          <div class="island"></div>
+          <div class="phone-screen" id="phoneScreen" data-theme="a">
+            <div class="status-bar">
+              <span>9:41</span>
+              <span>●●●</span>
+            </div>
+
+            <div class="app-content">
+              <!-- LOGIN -->
+              <div class="screen-view active" data-screen="login">
+                <div class="scroll-area">
+                  <div class="hero-a hero-centered">
+                    <div class="brand brand-lg">HUANQI</div>
+                    <p class="tagline">Find people who share the same surreal sensation</p>
+                  </div>
+                  <div class="hero-b hero-poetic">
+                    <div class="brand brand-poetic">HuanQi</div>
+                    <p class="tagline-poetic">Find people who share the same surreal sensation</p>
+                  </div>
+                  <div class="hero-c hero-editorial">
+                    <div class="brand brand-editorial">HuanQi</div>
+                    <div class="editorial-rule"></div>
+                    <p class="tagline">Semantic sensation matching</p>
+                  </div>
+                  <div class="hero-d hero-clinical">
+                    <div class="brand brand-clinical">HuanQi / v1.0</div>
+                    <p class="tagline" style="margin-top:16px;font-family:var(--font-meta);font-size:11px">SEMANTIC RESONANCE TOOL · 17+ · NO IN-APP MESSAGING</p>
+                  </div>
+
+                  <div class="card">
+                    <div class="card-title">Sign in</div>
+                    <p class="card-hint">You must be 17 or older. This is a matching tool, not a chat app.</p>
+                    <button class="btn-apple" type="button"> Continue with Apple</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- WRITE -->
+              <div class="screen-view" data-screen="write">
+                <div class="scroll-area">
+                  <h1 class="page-h1">Write your sensation</h1>
+                  <p class="page-desc">Describe a surreal bodily or perceptual experience. English only. 80–500 words.</p>
+                  <div class="progress-bar theme-d-only" style="display:none" id="writeProgress"><div class="progress-fill"></div></div>
+                  <p class="clinical-step theme-d-only" style="display:none" id="writeStep">Step 1 of 2 · Record</p>
+                  <div style="margin-top:20px">
+                    <div class="field-label"><span>Sensation</span><span style="color:var(--accent)">142 / 500</span></div>
+                    <div class="textarea">It felt like my skin remembered a room that no longer exists — not nostalgia, but wrongness in the air against my forearms. Time folded sideways for three breaths.</div>
+                  </div>
+                  <div style="margin-top:16px">
+                    <button class="btn-primary" type="button">Publish to pool</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- MATCHES -->
+              <div class="screen-view" data-screen="matches">
+                <div class="scroll-area">
+                  <h1 class="page-h1">Your matches</h1>
+                  <p class="page-desc">Mutual semantic resonance ≥72%. No in-app messaging.</p>
+                  <div class="resonance-ring theme-b-only" style="display:none" id="matchRing">84%</div>
+                  <div class="match-item">
+                    <div class="match-meta">
+                      <span class="match-score">84% resonance</span>
+                      <span style="color:var(--text-3)">Preview</span>
+                    </div>
+                    <p class="match-body">The hallway stretched when I blinked — not visually, but in how my body expected three more steps than the floor allowed…</p>
+                  </div>
+                  <div class="match-item">
+                    <div class="match-meta">
+                      <span class="match-score">76% resonance</span>
+                      <span style="color:var(--text-3)">Unlocked</span>
+                    </div>
+                    <p class="match-body">For a moment I couldn't tell if I was inhaling or exhaling the color blue…</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- DETAIL -->
+              <div class="screen-view" data-screen="detail">
+                <div class="scroll-area">
+                  <button class="btn-ghost" type="button">← Back</button>
+                  <div class="wave-deco theme-b-only" style="display:none"></div>
+                  <h1 class="page-h1" style="margin-top:12px">84% resonance</h1>
+                  <p class="page-desc">Their sensation · locked</p>
+                  <div class="match-item" style="margin-top:16px">
+                    <p class="match-body" style="color:var(--text)">The hallway stretched when I blinked — not visually, but in the way my body expected three more steps than the floor allowed.</p>
+                  </div>
+                  <div class="unlock-panel">
+                    <p style="font-size:13px;line-height:1.5;margin-bottom:12px">Unlock to read the full sensation and exchange contact off-platform.</p>
+                    <button class="btn-primary" style="width:100%" type="button">Unlock — $0.99</button>
+                    <p style="font-size:10px;color:var(--text-3);text-align:center;margin-top:8px;font-family:var(--font-meta)">Apple In-App Purchase</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nav variants -->
+            <nav class="nav-bottom nav-a" id="navA">
+              <button class="nav-item" data-go="write" type="button">Write</button>
+              <button class="nav-item" data-go="matches" type="button">Matches</button>
+              <button class="nav-item" data-go="detail" type="button">Unlock</button>
+            </nav>
+            <div class="nav-floating-wrap nav-b" id="navB">
+              <nav class="nav-floating">
+                <button class="nav-item" data-go="write" type="button">Write</button>
+                <button class="nav-item active" data-go="matches" type="button">Matches</button>
+                <button class="nav-item" data-go="detail" type="button">Unlock</button>
+              </nav>
+            </div>
+            <nav class="nav-top nav-c" id="navC">
+              <button class="nav-item active" data-go="write" type="button">Write</button>
+              <button class="nav-item" data-go="matches" type="button">Matches</button>
+              <button class="nav-item" data-go="detail" type="button">Unlock</button>
+            </nav>
+            <nav class="nav-minimal nav-d" id="navD">
+              <button class="nav-item" data-go="write" type="button">Write</button>
+              <button class="nav-item active" data-go="matches" type="button">Match</button>
+              <button class="nav-item" data-go="detail" type="button">Unlock</button>
+              <span style="color:var(--text-3)">Settings</span>
+            </nav>
+
+            <div class="home-bar"></div>
+          </div>
+        </div>
+
+        <div class="screen-switch">
+          <button class="active" data-screen="login" type="button">登录</button>
+          <button data-screen="write" type="button">撰写</button>
+          <button data-screen="matches" type="button">匹配</button>
+          <button data-screen="detail" type="button">解锁</button>
+        </div>
+      </div>
+
+      <!-- PM 分析 -->
+      <aside class="pm-panel" id="pmPanel">
+        <!-- filled by JS -->
+      </aside>
+    </div>
+
+    <!-- 对比矩阵 -->
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>评估维度</th>
+          <th>A 紫晶</th>
+          <th>B 雾境</th>
+          <th>C 档案</th>
+          <th>D Clinical</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>App Store 工具类目感</td><td class="best">★★★★★</td><td>★★★</td><td>★★★★</td><td class="best">★★★★★</td></tr>
+        <tr><td>目标用户情感共鸣</td><td>★★★</td><td class="best">★★★★★</td><td class="best">★★★★★</td><td>★★★</td></tr>
+        <tr><td>长文阅读舒适度</td><td>★★★★</td><td>★★★★</td><td class="best">★★★★★</td><td>★★★★</td></tr>
+        <tr><td>与社交 App 差异化</td><td>★★★★</td><td>★★★</td><td class="best">★★★★★</td><td class="best">★★★★★</td></tr>
+        <tr><td>开发落地成本</td><td class="best">★★★★★</td><td>★★★</td><td>★★★</td><td>★★★★</td></tr>
+        <tr><td>夜间使用 / 低刺激</td><td>★★★★</td><td class="best">★★★★★</td><td>★★</td><td>★★★★</td></tr>
+        <tr><td>品牌记忆度</td><td>★★★</td><td class="best">★★★★★</td><td>★★★★</td><td>★★★</td></tr>
+      </tbody>
+    </table>
+
+    <div class="recommendation">
+      <h3>✓ 已选定：方案 A · Obsidian 紫晶</h3>
+      <p>V1 正式采用方案 A 作为设计基线，组件类名以 <code style="color:#c4b5fd">shell-*</code> 前缀落地于 <code style="color:#c4b5fd">apps/web/src/styles/</code>。B/C/D 方案保留供后续版本参考。</p>
+    </div>
+  </div>
+
+  <script>
+    const VARIANTS = {
+      a: {
+        name: "Obsidian 紫晶",
+        subtitle: "现有 Web Shell 方向的正式化演进",
+        scores: { trust: 9, emotion: 6, dev: 10 },
+        positioning: "强调「专业工具」：深色石质底 +  violet 功能色，接近 iOS Utilities 类 App 的常见范式（如计算器、录音笔类）。用户打开即知「这不是社交软件」。",
+        pros: [
+          "与当前代码库一致，改动成本最低",
+          "App Store 审核员最易归类为 Utilities",
+          "深色模式适合目标用户的夜间使用习惯",
+          "紫色在竞品中少见，有基础辨识度"
+        ],
+        cons: [
+          "视觉语言偏「科技 Startup」，艺术感不足",
+          "与 Linear / Notion 等工具同质化风险",
+          "登录页缺乏产品独有的「超现实」叙事"
+        ],
+        screens: {
+          login: "品牌全大写 HUANQI + 居中卡片，Sign in with Apple 为主按钮",
+          write: "标准表单布局，字数计数器用 emerald 反馈",
+          matches: "卡片列表 + 百分比 violet 高亮",
+          detail: "解锁区块用 violet 边框强调 IAP 转化点"
+        }
+      },
+      b: {
+        name: "Ethereal 雾境",
+        subtitle: "为梦境/解离体验者设计的情感化界面",
+        scores: { trust: 7, emotion: 10, dev: 6 },
+        positioning: "用渐变雾面、italic 衬线品牌字、浮动胶囊 Tab，传递「漂浮、模糊边界、非人间」的产品气质。匹配页用共振环可视化 84% 相似度，替代冷冰冰的数字。",
+        pros: [
+          "与产品 Slogan 高度一致，品牌故事感最强",
+          "浮动 Tab 减少「App 框架感」，更像沉浸空间",
+          "低对比渐变对高敏感用户更友好",
+          "App Store 截图视觉冲击力强"
+        ],
+        cons: [
+          "渐变 + 衬线可能被审核员误判为 Lifestyle/Social",
+          "开发需自定义较多视觉（渐变、动画）",
+          "浅色文字区域在强光下可读性下降",
+          "与「工具类」定位存在张力，需文案补偿"
+        ],
+        screens: {
+          login: "大号 italic HuanQi + 双层 mist 渐变背景",
+          write: "圆角加大 (20px)，输入框半透明",
+          matches: "顶部共振环展示最高匹配度",
+          detail: "波形装饰 + 解锁面板"
+        }
+      },
+      c: {
+        name: "Archive 档案",
+        subtitle: "文学期刊美学 — 私密信件，而非 App",
+        scores: { trust: 8, emotion: 9, dev: 6 },
+        positioning: "纸感暖白底 + 衬线正文 + 等宽 metadata + 顶部 Tab。用户感觉在翻阅私人档案，而非刷列表。强化「你的体感是文本，不是 Profile」。",
+        pros: [
+          "长文阅读体验最佳，衬线适合 80–500 词",
+          "与社交 App 视觉完全切割",
+          "符合 Tumblr / 独立杂志审美，目标用户熟悉",
+          "编辑感排版提升 UGC 内容的「被尊重感」"
+        ],
+        cons: [
+          "浅色主题不适合深夜场景（用户主力时段）",
+          "需单独做 Dark Mode 否则体验割裂",
+          "Sign in with Apple 白按钮在暖白底上对比度低",
+          "开发等于重做一套 design token"
+        ],
+        screens: {
+          login: "Editorial 左对齐标题 + 金色规则线",
+          write: "正文区用 Instrument Serif，meta 用 IBM Plex Mono",
+          matches: "卡片像剪报条目，日期/百分比等宽",
+          detail: "信件式解锁提示，underline 链接风格"
+        }
+      },
+      d: {
+        name: "Signal Clinical",
+        subtitle: "极简语义工具 — 像仪器，不像社区",
+        scores: { trust: 10, emotion: 5, dev: 8 },
+        positioning: "Teal accent + 等宽字体 + 进度条 + 步骤指示。把「匹配」呈现为信号处理结果，最大限度远离 Dating App 视觉范式。审核友好度最高。",
+        pros: [
+          "「工具」定位最极致，审核风险最低",
+          "等宽字体让 72%/84% 数据显得「客观」",
+          "步骤指示降低首次使用认知负担",
+          "Teal 色传递「冷静、安全、医疗级」"
+        ],
+        cons: [
+          "情感连接弱，可能让用户觉得「冷」",
+          "与「超现实/梦境」品牌叙事有距离",
+          "顶部 minimal nav 信息密度低",
+          "不适合做品牌营销截图"
+        ],
+        screens: {
+          login: "全大写 meta 标签 + 版本号，零装饰",
+          write: "Step 1/2 进度条 + 字数",
+          matches: "数据优先，列表极简",
+          detail: "IAP 按钮像确认操作，而非购买营销"
+        }
+      }
+    };
+
+    const phoneScreen = document.getElementById("phoneScreen");
+    const pmPanel = document.getElementById("pmPanel");
+    let currentVariant = "a";
+    let currentScreen = "login";
+
+    function updateThemeDecorations(theme) {
+      document.getElementById("writeProgress").style.display = theme === "d" ? "block" : "none";
+      document.getElementById("writeStep").style.display = theme === "d" ? "block" : "none";
+      document.getElementById("matchRing").style.display = theme === "b" ? "block" : "none";
+      document.querySelectorAll(".theme-b-only").forEach(el => {
+        el.style.display = theme === "b" ? (el.classList.contains("wave-deco") ? "block" : "block") : "none";
+      });
+    }
+
+    function renderPmPanel(v) {
+      const d = VARIANTS[v];
+      pmPanel.innerHTML = `
+        <h2>${d.name}</h2>
+        <p class="subtitle">${d.subtitle}</p>
+        <div class="pm-score-grid">
+          <div class="pm-score"><div class="val" style="--score-color:#34d399">${d.scores.trust}</div><div class="lbl">信任 / 审核</div></div>
+          <div class="pm-score"><div class="val" style="--score-color:#a78bfa">${d.scores.emotion}</div><div class="lbl">情感共鸣</div></div>
+          <div class="pm-score"><div class="val" style="--score-color:#fbbf24">${d.scores.dev}</div><div class="lbl">落地成本</div></div>
+        </div>
+        <div class="pm-section"><h3>设计定位</h3><p style="font-size:13px;color:#d6d3d1;line-height:1.6">${d.positioning}</p></div>
+        <div class="pm-section pros"><h3>优势</h3><ul>${d.pros.map(p => `<li>${p}</li>`).join("")}</ul></div>
+        <div class="pm-section cons"><h3>风险</h3><ul>${d.cons.map(c => `<li>${c}</li>`).join("")}</ul></div>
+        <div class="pm-section"><h3>当前屏幕说明 · ${currentScreen}</h3><p style="font-size:13px;color:#d6d3d1;line-height:1.6">${d.screens[currentScreen]}</p></div>
+      `;
+    }
+
+    function showScreen(name) {
+      currentScreen = name;
+      document.querySelectorAll(".screen-view").forEach(v => v.classList.toggle("active", v.dataset.screen === name));
+      document.querySelectorAll(".screen-switch button").forEach(b => b.classList.toggle("active", b.dataset.screen === name));
+
+      const showNav = name !== "login";
+      ["navA","navB","navC","navD"].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.style.display = showNav ? "" : "none";
+      });
+
+      document.querySelectorAll(".nav-item").forEach(n => {
+        n.classList.toggle("active", n.dataset.go === name);
+      });
+
+      renderPmPanel(currentVariant);
+    }
+
+    function setVariant(v) {
+      currentVariant = v;
+      phoneScreen.dataset.theme = v;
+      document.querySelectorAll(".variant-tab").forEach(t => t.classList.toggle("active", t.dataset.v === v));
+      updateThemeDecorations(v);
+      renderPmPanel(v);
+    }
+
+    document.querySelectorAll(".variant-tab").forEach(tab => {
+      tab.addEventListener("click", () => setVariant(tab.dataset.v));
+    });
+
+    document.querySelectorAll(".screen-switch button").forEach(btn => {
+      btn.addEventListener("click", () => showScreen(btn.dataset.screen));
+    });
+
+    document.querySelectorAll(".nav-item[data-go]").forEach(btn => {
+      btn.addEventListener("click", () => showScreen(btn.dataset.go));
+    });
+
+    setVariant("a");
+    showScreen("login");
+  </script>
+</body>
+</html>

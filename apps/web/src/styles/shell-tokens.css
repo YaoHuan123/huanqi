@@ -1,4 +1,8 @@
-/* HuanQi web app shell — dark stone + violet */
+/*
+ * HuanQi Design System — Scheme A: Obsidian 紫晶
+ * Selected for V1 iOS + Web. Dark stone surfaces, violet accent, bottom tab nav.
+ * See ios-design-alternatives.html for rejected schemes B–D.
+ */
 :root {
   /* 外层画布：与手机内屏拉开对比，才能看出「壳」 */
   --shell-bg-canvas: #44403c;
@@ -12,8 +16,12 @@
 
   --shell-brand: #8b5cf6;
   --shell-brand-deep: #7c3aed;
+  --shell-brand-light: #c4b5fd;
   --shell-brand-soft: rgba(139, 92, 246, 0.12);
   --shell-brand-ring: rgba(139, 92, 246, 0.35);
+  --shell-success: #34d399;
+  --shell-warning: #fbbf24;
+  --shell-danger: #f87171;
 
   --shell-frame-border: rgba(255, 255, 255, 0.14);
   --shell-separator: rgba(255, 255, 255, 0.08);

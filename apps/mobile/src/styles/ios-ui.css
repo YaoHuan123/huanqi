@@ -1,0 +1,440 @@
+/* iOS Human Interface Guidelines — dark grouped style */
+
+.ios-page {
+  padding: 0 0 24px;
+}
+
+.ios-large-title-wrap {
+  padding: 8px 20px 12px;
+}
+
+.ios-large-title {
+  margin: 0;
+  font-size: var(--ios-large-title-size);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.12;
+  color: var(--shell-label-1);
+}
+
+.ios-large-subtitle {
+  margin: 6px 0 0;
+  font-size: var(--ios-footnote-size);
+  line-height: 1.35;
+  color: var(--shell-label-2);
+}
+
+.ios-section {
+  margin-top: 22px;
+}
+
+.ios-section:first-child {
+  margin-top: 0;
+}
+
+.ios-section-header {
+  margin: 0 0 7px;
+  padding: 0 36px 0 20px;
+  font-size: var(--ios-footnote-size);
+  line-height: 1.3;
+  color: var(--shell-label-2);
+  text-transform: none;
+}
+
+.ios-section-footer {
+  margin: 7px 0 0;
+  padding: 0 36px 0 20px;
+  font-size: var(--ios-footnote-size);
+  line-height: 1.35;
+  color: var(--shell-label-2);
+}
+
+.ios-group {
+  margin: 0 16px;
+  background: var(--shell-bg-elevated);
+  border-radius: var(--shell-radius-group);
+  overflow: hidden;
+}
+
+.ios-group--inset {
+  /* alias */
+}
+
+.ios-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 11px 16px;
+  box-sizing: border-box;
+  color: var(--shell-label-1);
+  font-size: var(--ios-body-size);
+  line-height: 1.25;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+.ios-row:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.ios-row:disabled {
+  opacity: 0.45;
+}
+
+.ios-row + .ios-row::before,
+.ios-group > * + *::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 0;
+  height: 0.5px;
+  background: var(--shell-separator);
+  pointer-events: none;
+}
+
+.ios-group > .ios-row + .ios-row::before,
+.ios-group > * + .ios-row::before {
+  left: 16px;
+}
+
+.ios-row--link {
+  cursor: pointer;
+}
+
+.ios-row__main {
+  flex: 1;
+  min-width: 0;
+}
+
+.ios-row__label {
+  display: block;
+  font-size: var(--ios-body-size);
+  color: var(--shell-label-1);
+}
+
+.ios-row__detail {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--ios-footnote-size);
+  line-height: 1.35;
+  color: var(--shell-label-2);
+}
+
+.ios-row__value {
+  flex-shrink: 0;
+  font-size: var(--ios-body-size);
+  color: var(--shell-label-2);
+}
+
+.ios-row__chevron {
+  flex-shrink: 0;
+  width: 8px;
+  height: 13px;
+  opacity: 0.35;
+}
+
+.ios-row--destructive .ios-row__label {
+  color: #ff453a;
+}
+
+.ios-row--brand .ios-row__label {
+  color: var(--shell-brand);
+}
+
+.ios-field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 11px 16px;
+  min-height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--shell-label-1);
+  font-size: var(--ios-body-size);
+  font-family: inherit;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.ios-field::placeholder {
+  color: var(--shell-label-3);
+}
+
+.ios-field--textarea {
+  min-height: 180px;
+  resize: none;
+  line-height: 1.45;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.ios-field--code {
+  letter-spacing: 0.2em;
+  font-variant-numeric: tabular-nums;
+}
+
+.ios-btn-filled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 50px;
+  padding: 0 20px;
+  border: none;
+  border-radius: var(--shell-radius-button);
+  background: var(--shell-brand);
+  color: #ffffff;
+  font-size: var(--ios-body-size);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ios-btn-filled:active:not(:disabled) {
+  filter: brightness(0.92);
+}
+
+.ios-btn-filled:disabled {
+  opacity: 0.4;
+}
+
+.ios-btn-apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 50px;
+  padding: 0 20px;
+  border: none;
+  border-radius: var(--shell-radius-button);
+  background: #ffffff;
+  color: #000000;
+  font-size: var(--ios-body-size);
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.ios-btn-apple:active:not(:disabled) {
+  opacity: 0.85;
+}
+
+.ios-btn-plain {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 4px;
+  border: none;
+  background: transparent;
+  color: var(--shell-brand);
+  font-size: var(--ios-body-size);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.ios-toggle-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  padding: 11px 16px;
+  font-size: var(--ios-body-size);
+  line-height: 1.35;
+  color: var(--shell-label-1);
+}
+
+.ios-toggle-row input[type="checkbox"] {
+  width: 22px;
+  height: 22px;
+  margin-top: 1px;
+  flex-shrink: 0;
+  accent-color: var(--shell-brand);
+}
+
+.ios-banner {
+  margin: 0 16px 16px;
+  padding: 12px 14px;
+  border-radius: var(--shell-radius-group);
+  font-size: var(--ios-footnote-size);
+  line-height: 1.35;
+}
+
+.ios-banner--info {
+  background: var(--shell-brand-soft);
+  color: var(--shell-label-1);
+}
+
+.ios-banner--success {
+  background: rgba(48, 209, 88, 0.15);
+  color: #30d158;
+}
+
+.ios-banner--error {
+  background: rgba(255, 69, 58, 0.15);
+  color: #ff453a;
+}
+
+.ios-banner--warning {
+  background: rgba(255, 159, 10, 0.15);
+  color: #ff9f0a;
+}
+
+.ios-empty {
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.ios-empty__title {
+  margin: 0;
+  font-size: var(--ios-title-2-size);
+  font-weight: 600;
+  color: var(--shell-label-1);
+}
+
+.ios-empty__body {
+  margin: 8px 0 0;
+  font-size: var(--ios-body-size);
+  line-height: 1.4;
+  color: var(--shell-label-2);
+}
+
+.ios-empty__action {
+  display: inline-block;
+  margin-top: 16px;
+  color: var(--shell-brand);
+  font-size: var(--ios-body-size);
+  text-decoration: none;
+}
+
+.ios-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--shell-navbar-height);
+  padding: 0 8px 0 4px;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: saturate(180%) blur(20px);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  border-bottom: 0.5px solid var(--shell-separator);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.ios-navbar__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  color: var(--shell-brand);
+  font-size: var(--ios-body-size);
+  font-family: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ios-navbar__back svg {
+  width: 12px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.ios-navbar__title {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 55%;
+  font-size: var(--ios-body-size);
+  font-weight: 600;
+  color: var(--shell-label-1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+.ios-navbar__side {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.ios-article {
+  padding: 16px;
+  font-size: var(--ios-body-size);
+  line-height: 1.45;
+  color: var(--shell-label-1);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.ios-meta {
+  padding: 8px 16px 12px;
+  font-size: var(--ios-caption-size);
+  color: var(--shell-label-2);
+}
+
+.ios-resonance {
+  font-size: var(--ios-title-2-size);
+  font-weight: 600;
+  color: var(--shell-brand);
+}
+
+.ios-login {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px));
+  overflow-y: auto;
+}
+
+.ios-login-hero {
+  padding: 48px 24px 32px;
+  text-align: center;
+}
+
+.ios-login-logo {
+  margin: 0;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--shell-label-1);
+}
+
+.ios-login-tagline {
+  margin: 10px 0 0;
+  font-size: var(--ios-body-size);
+  line-height: 1.4;
+  color: var(--shell-label-2);
+}
+
+.ios-login-form {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ios-loading {
+  padding: 40px 20px;
+  text-align: center;
+  font-size: var(--ios-footnote-size);
+  color: var(--shell-label-2);
+}

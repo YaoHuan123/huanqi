@@ -5,6 +5,7 @@ import { appleLogin, sendEmailCode, verifyEmailCode } from "../api/client";
 import { authTokenStore } from "../lib/authToken";
 import { signInWithAppleNative } from "../lib/appleSignIn";
 import { isIosNative } from "../lib/platform";
+import { IosBanner, IosSection } from "../components/ios/IosChrome";
 
 type Step = "email" | "code";
 
@@ -83,74 +84,95 @@ export function LoginPage() {
   }
 
   return (
-    <div className="app-shell-phone">
-      <div className="login-shell">
-        <div className="login-hero">
-          <h1 className="login-shell-title">{APP_NAME}</h1>
-          <p className="mt-2 text-sm text-stone-400">{APP_TAGLINE}</p>
-        </div>
+    <div className="app-root">
+      <div className="app-shell-phone">
+        <div className="ios-login">
+          <div className="ios-login-hero">
+            <h1 className="ios-login-logo">{APP_NAME}</h1>
+            <p className="ios-login-tagline">{APP_TAGLINE}</p>
+          </div>
 
-        <div className="login-card">
-          {isIosNative() && (
-            <button
-              type="button"
-              onClick={onAppleSignIn}
-              disabled={loading}
-              className="w-full rounded-lg bg-white px-4 py-2.5 font-medium text-black hover:bg-stone-200 disabled:opacity-50"
-            >
-              Continue with Apple
-            </button>
-          )}
+          <div className="ios-login-form">
+            {error && <IosBanner tone="error">{error}</IosBanner>}
+            {info && <IosBanner tone="info">{info}</IosBanner>}
 
-          {step === "email" ? (
-            <form onSubmit={onSendCode} className="space-y-3">
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@example.com"
-                className="w-full rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 text-stone-100 outline-none ring-violet-400 focus:ring-2"
-              />
+            {isIosNative() && (
               <button
-                type="submit"
+                type="button"
+                onClick={onAppleSignIn}
                 disabled={loading}
-                className="w-full rounded-lg bg-violet-600 px-4 py-2.5 font-medium text-white hover:bg-violet-500 disabled:opacity-50"
+                className="ios-btn-apple"
               >
-                Send code
+                Continue with Apple
               </button>
-            </form>
-          ) : (
-            <form onSubmit={onVerifyCode} className="space-y-3">
-              <input
-                inputMode="numeric"
-                required
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="123456"
-                className="w-full rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 tracking-widest text-stone-100 outline-none ring-violet-400 focus:ring-2"
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-lg bg-violet-600 px-4 py-2.5 font-medium text-white hover:bg-violet-500 disabled:opacity-50"
-              >
-                Sign in
-              </button>
-            </form>
-          )}
+            )}
 
-          <label className="flex items-start gap-2 text-xs text-stone-400">
-            <input type="checkbox" checked={acceptTerms} onChange={(e) => setAcceptTerms(e.target.checked)} />
-            <span>I accept the Terms of Service</span>
-          </label>
-          <label className="flex items-start gap-2 text-xs text-stone-400">
-            <input type="checkbox" checked={acceptPrivacy} onChange={(e) => setAcceptPrivacy(e.target.checked)} />
-            <span>I accept the Privacy Policy</span>
-          </label>
+            {step === "email" ? (
+              <form onSubmit={onSendCode}>
+                <IosSection header="Email sign in">
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Email"
+                    autoComplete="email"
+                    className="ios-field"
+                  />
+                </IosSection>
+                <div style={{ marginTop: 20 }}>
+                  <button type="submit" disabled={loading} className="ios-btn-filled">
+                    Send code
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={onVerifyCode}>
+                <IosSection header={`Code sent to ${email}`}>
+                  <input
+                    inputMode="numeric"
+                    required
+                    value={code}
+                    onChange={(e) => setCode(e.target.value)}
+                    placeholder="6-digit code"
+                    className="ios-field ios-field--code"
+                  />
+                </IosSection>
+                <div style={{ marginTop: 20 }}>
+                  <button type="submit" disabled={loading} className="ios-btn-filled">
+                    Sign in
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setStep("email")}
+                  className="ios-btn-plain"
+                  style={{ width: "100%", marginTop: 8 }}
+                >
+                  Use a different email
+                </button>
+              </form>
+            )}
 
-          {info && <p className="text-sm text-emerald-400">{info}</p>}
-          {error && <p className="text-sm text-red-400">{error}</p>}
+            <IosSection header="Legal">
+              <label className="ios-toggle-row">
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={(e) => setAcceptTerms(e.target.checked)}
+                />
+                <span>I accept the Terms of Service</span>
+              </label>
+              <label className="ios-toggle-row">
+                <input
+                  type="checkbox"
+                  checked={acceptPrivacy}
+                  onChange={(e) => setAcceptPrivacy(e.target.checked)}
+                />
+                <span>I accept the Privacy Policy</span>
+              </label>
+            </IosSection>
+          </div>
         </div>
       </div>
     </div>

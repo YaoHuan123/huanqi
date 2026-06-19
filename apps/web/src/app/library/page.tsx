@@ -60,36 +60,33 @@ export default function LibraryPage() {
 
   return (
     <div className="app-page-content">
-      <h1 className="text-2xl font-semibold">My sensations</h1>
-      <p className="mt-2 text-sm text-stone-400">
+      <h1 className="shell-page-title">My sensations</h1>
+      <p className="shell-page-desc">
         Your published sensations. Delete any entry to remove it from matching.
       </p>
 
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
+      {error && <p className="shell-status-error mt-4">{error}</p>}
 
       {loading ? (
         <p className="mt-10 text-sm text-stone-500">Loading…</p>
       ) : items.length === 0 ? (
-        <div className="mt-10 rounded-xl border border-stone-800 bg-stone-900/30 p-6 text-sm text-stone-400">
+        <div className="shell-empty-state">
           <p>You have not published anything yet.</p>
           <p className="mt-2">
-            <Link href="/write" className="text-violet-300 hover:underline">
+            <Link href="/write" className="shell-link">
               Write a sensation
             </Link>
           </p>
         </div>
       ) : (
-        <ul className="mt-8 space-y-4">
+        <ul className="shell-list">
           {items.map((item) => (
-            <li
-              key={item.id}
-              className="rounded-xl border border-stone-800 bg-stone-900/40 p-5"
-            >
+            <li key={item.id} className="shell-card">
               <p className="whitespace-pre-wrap text-sm leading-relaxed text-stone-200">
                 {excerpt(item.body, 280)}
               </p>
               <div className="mt-3 flex items-center justify-between gap-3">
-                <p className="text-xs text-stone-500">
+                <p className="shell-match-meta">
                   {item.wordCount} words · {new Date(item.createdAt).toLocaleDateString("en-US")}
                 </p>
                 <button

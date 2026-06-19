@@ -183,13 +183,13 @@ export function LoginForm() {
         {iosNative ? (
           <div className="space-y-4">
             {consentFields}
-            {error && <p className="text-sm text-red-400">{error}</p>}
-            {info && <p className="text-sm text-emerald-400">{info}</p>}
+            {error && <p className="shell-status-error">{error}</p>}
+            {info && <p className="shell-status-success">{info}</p>}
             <button
               type="button"
               onClick={signInWithApple}
               disabled={loading || !consentOk}
-              className="w-full rounded-lg bg-white px-4 py-2.5 font-medium text-black transition hover:bg-stone-200 disabled:cursor-not-allowed disabled:opacity-50"
+              className="shell-btn-apple"
             >
               {loading ? "Please wait…" : "Continue with Apple"}
             </button>
@@ -204,7 +204,7 @@ export function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={step === "code"}
-                className="w-full rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 text-stone-100 outline-none ring-violet-400 focus:ring-2 disabled:opacity-60"
+                className="shell-input disabled:opacity-60"
                 placeholder="you@example.com"
               />
             </label>
@@ -220,7 +220,7 @@ export function LoginForm() {
                   required
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
-                  className="w-full rounded-lg border border-stone-700 bg-stone-900 px-3 py-2 tracking-widest text-stone-100 outline-none ring-violet-400 focus:ring-2"
+                  className="shell-input tracking-widest"
                   placeholder="000000"
                 />
               </label>
@@ -237,13 +237,12 @@ export function LoginForm() {
               </div>
             )}
 
-            {error && <p className="text-sm text-red-400">{error}</p>}
-            {info && <p className="text-sm text-emerald-400">{info}</p>}
-
+            {error && <p className="shell-status-error">{error}</p>}
+            {info && <p className="shell-status-success">{info}</p>}
             <button
               type="submit"
               disabled={loading || (step === "code" && !consentOk)}
-              className="w-full rounded-lg bg-violet-600 px-4 py-2.5 font-medium text-white transition hover:bg-violet-500 disabled:cursor-not-allowed disabled:opacity-50"
+              className="shell-btn-primary shell-btn-primary--full"
             >
               {loading
                 ? "Please wait…"

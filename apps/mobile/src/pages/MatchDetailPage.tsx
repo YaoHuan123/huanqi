@@ -1,6 +1,7 @@
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { apiRequest } from "../api/client";
+import { IosBanner, IosNavBar, IosPage, IosSection } from "../components/ios/IosChrome";
 
 type MatchDetail = {
   id: string;
@@ -58,83 +59,117 @@ export function MatchDetailPage() {
     }
   }
 
-  if (loading) return <p className="app-page-content text-sm text-stone-500">Loading…</p>;
+  if (loading) {
+    return (
+      <>
+        <IosNavBar title="Match" backLabel="Matches" onBack={() => navigate("/matches")} />
+        <p className="ios-loading">Loading…</p>
+      </>
+    );
+  }
+
   if (!match) {
     return (
-      <div className="app-page-content">
-        <p className="text-sm text-red-400">{error ?? "Not found"}</p>
-        <Link to="/matches" className="mt-4 inline-block text-sm text-violet-300">
-          Back
-        </Link>
-      </div>
+      <>
+        <IosNavBar title="Match" backLabel="Matches" onBack={() => navigate("/matches")} />
+        <IosPage>
+          <IosBanner tone="error">{error ?? "Not found"}</IosBanner>
+        </IosPage>
+      </>
     );
   }
 
   return (
-    <div className="app-page-content">
-      <Link to="/matches" className="text-sm text-stone-500">
-        ← Back
-      </Link>
-      <h1 className="mt-6 text-2xl font-semibold">{match.similarityPercent}% resonance</h1>
-      <article className="mt-8 rounded-xl border border-stone-800 bg-stone-900/40 p-5 text-sm whitespace-pre-wrap text-stone-200">
-        {match.otherSensation.body}
-      </article>
-      {match.canUnlock && (
-        <button
-          type="button"
-          onClick={() => runAction(`/api/matches/${id}`)}
-          disabled={actionLoading}
-          className="mt-6 rounded-lg bg-violet-600 px-5 py-2.5 text-sm text-white disabled:opacity-50"
+    <>
+      <IosNavBar
+        title={`${match.similarityPercent}%`}
+        backLabel="Matches"
+        onBack={() => navigate("/matches")}
+      />
+      <IosPage>
+        {error && <IosBanner tone="error">{error}</IosBanner>}
+
+        <IosSection header="Their sensation">
+          <div className="ios-article">{match.otherSensation.body}</div>
+        </IosSection>
+
+        {(match.canUnlock || match.canConfirm || match.canShare) && (
+          <IosSection header="Actions">
+            {match.canUnlock && (
+              <button
+                type="button"
+                onClick={() => runAction(`/api/matches/${id}`)}
+                disabled={actionLoading}
+                className="ios-row ios-row--brand"
+              >
+                <span className="ios-row__label">Unlock (free beta)</span>
+              </button>
+            )}
+            {match.canConfirm && (
+              <button
+                type="button"
+                onClick={() => runAction(`/api/matches/${id}/confirm`)}
+                disabled={actionLoading}
+                className="ios-row ios-row--brand"
+              >
+                <span className="ios-row__label">Confirm match</span>
+              </button>
+            )}
+            {match.canShare && (
+              <button
+                type="button"
+                onClick={() => runAction(`/api/matches/${id}/share-contact`)}
+                disabled={actionLoading}
+                className="ios-row ios-row--brand"
+              >
+                <span className="ios-row__label">Share my email</span>
+              </button>
+            )}
+          </IosSection>
+        )}
+
+        {match.my.bothShared && match.otherContact?.email && (
+          <IosSection header="Contact">
+            <div className="ios-row">
+              <span className="ios-row__main">
+                <span className="ios-row__label">{match.otherContact.email}</span>
+              </span>
+            </div>
+          </IosSection>
+        )}
+
+        {match.waitingForOther && (
+          <IosBanner tone="info">Waiting for the other person to share contact.</IosBanner>
+        )}
+
+        <IosSection
+          header="Manage"
+          footer="Removing or blocking cannot be undone for this match."
         >
-          Unlock (free beta)
-        </button>
-      )}
-      {match.canConfirm && (
-        <button
-          type="button"
-          onClick={() => runAction(`/api/matches/${id}/confirm`)}
-          disabled={actionLoading}
-          className="mt-4 rounded-lg bg-emerald-700 px-4 py-2 text-sm text-white disabled:opacity-50"
-        >
-          Confirm match
-        </button>
-      )}
-      {match.canShare && (
-        <button
-          type="button"
-          onClick={() => runAction(`/api/matches/${id}/share-contact`)}
-          disabled={actionLoading}
-          className="mt-4 rounded-lg bg-violet-600 px-5 py-2.5 text-sm text-white disabled:opacity-50"
-        >
-          Share my email
-        </button>
-      )}
-      {match.my.bothShared && match.otherContact?.email && (
-        <p className="mt-6 font-mono text-sm text-emerald-300">{match.otherContact.email}</p>
-      )}
-      {error && <p className="mt-4 text-sm text-red-400">{error}</p>}
-      <div className="mt-10 flex gap-4">
-        <button
-          type="button"
-          onClick={async () => {
-            await runAction(`/api/matches/${id}`, "DELETE");
-            navigate("/matches");
-          }}
-          className="text-sm text-stone-500"
-        >
-          Remove
-        </button>
-        <button
-          type="button"
-          onClick={async () => {
-            await runAction(`/api/matches/${id}/block`);
-            navigate("/matches");
-          }}
-          className="text-sm text-red-400"
-        >
-          Block
-        </button>
-      </div>
-    </div>
+          <button
+            type="button"
+            onClick={async () => {
+              await runAction(`/api/matches/${id}`, "DELETE");
+              navigate("/matches");
+            }}
+            disabled={actionLoading}
+            className="ios-row"
+          >
+            <span className="ios-row__label">Remove match</span>
+          </button>
+          <button
+            type="button"
+            onClick={async () => {
+              await runAction(`/api/matches/${id}/block`);
+              navigate("/matches");
+            }}
+            disabled={actionLoading}
+            className="ios-row ios-row--destructive"
+          >
+            <span className="ios-row__label">Block</span>
+          </button>
+        </IosSection>
+      </IosPage>
+    </>
   );
 }
