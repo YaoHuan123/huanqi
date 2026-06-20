@@ -63,7 +63,7 @@ workflows:
           xcode-project build-ipa \
             --workspace "App.xcworkspace" \
             --scheme "$XCODE_SCHEME" \
-            --export-method app-store
+            --export-options-plist "$CM_BUILD_DIR/apps/mobile/ios/export_options_appstore.plist"
           ls -la build/ios/ipa/
 
     artifacts:
