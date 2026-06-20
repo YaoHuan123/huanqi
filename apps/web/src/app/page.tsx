@@ -29,7 +29,7 @@ export default function Home() {
       <section className="rounded-2xl border border-stone-800 bg-stone-900/50 p-6">
         <h2 className="text-lg font-semibold text-stone-100">Get the app</h2>
         <p className="mt-2 max-w-lg text-sm leading-relaxed text-stone-400">
-          HuanQi runs on iPhone and iPad. Sign in with Apple, publish English sensation records,
+          HuanQi runs on iPhone. Sign in with Apple, publish English sensation records,
           and unlock matches with Apple In-App Purchase.
         </p>
         <p className="mt-4 text-sm text-stone-500">

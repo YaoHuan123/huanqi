@@ -102,7 +102,7 @@ export function LoginForm() {
         <div className="login-card">
           <h1 className="m-0 text-lg font-semibold text-stone-100">iOS app only</h1>
           <p className="m-0 text-sm text-stone-400">
-            HuanQi is available on iPhone and iPad. Sign in with Apple in the app to write
+            HuanQi is available on iPhone. Sign in with Apple in the app to write
             sensations, get matches, and unlock contact via Apple In-App Purchase.
           </p>
           <p className="m-0 text-sm text-stone-500">
