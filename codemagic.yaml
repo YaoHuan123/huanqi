@@ -1,28 +1,27 @@
 # HuanQi iOS — Codemagic (ios branch)
 #
-# Native app: UI bundled in IPA, API at VITE_API_BASE_URL
-# Codemagic → Code signing Reference name: huanqi-hoc (profile + cert)
+# App Store upload: profile huanqi-appstore
+# Certificate: reuse existing Distribution .p12 (Codemagic ref huanqi-hoc) or set to huanqi-appstore if re-uploaded
 
 workflows:
-  huanqi-ios-adhoc:
-    name: HuanQi iOS Ad Hoc
+  huanqi-ios-appstore:
+    name: HuanQi iOS App Store
     max_build_duration: 90
     instance_type: mac_mini_m2
 
     environment:
       ios_signing:
         provisioning_profiles:
-          - huanqi-hoc
+          - huanqi-appstore
         certificates:
           - huanqi-hoc
       vars:
         BUNDLE_ID: io.github.YaoHuan123.huanqi
         XCODE_SCHEME: App
         XCODE_PROJECT_DIR: apps/mobile/ios/App
-        VITE_API_BASE_URL: "http://192.168.137.1:3001"
+        VITE_API_BASE_URL: "https://hellotita.top"
         VITE_APPLE_BUNDLE_ID: io.github.YaoHuan123.huanqi
-        VITE_APPLE_DEV_MOCK: "1"
-        DATABASE_URL: "file:./dev.db"
+        VITE_IAP_DEV_MOCK: "0"
       node: 20
       xcode: latest
       cocoapods: default
@@ -57,15 +56,21 @@ workflows:
       - name: Set up code signing on Xcode project
         script: xcode-project use-profiles
 
-      - name: Build ad hoc IPA
+      - name: Build App Store IPA
         script: |
           set -e
           cd "$CM_BUILD_DIR/$XCODE_PROJECT_DIR"
           xcode-project build-ipa \
             --workspace "App.xcworkspace" \
-            --scheme "$XCODE_SCHEME"
+            --scheme "$XCODE_SCHEME" \
+            --export-method app-store
           ls -la build/ios/ipa/
 
     artifacts:
       - apps/mobile/ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
+
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
