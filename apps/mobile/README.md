@@ -38,8 +38,9 @@ No `CAPACITOR_SERVER_URL` — the UI ships inside the app.
 
 **Error `AuthorizationError 1000`** means the iOS build is missing Apple Sign In entitlements or the App ID is not configured.
 
-1. **Apple Developer** → Identifiers → `io.github.YaoHuan123.huanqi` → enable **Sign in with Apple** → Save.
-2. **Xcode** → App target → **Signing & Capabilities** → **+ Capability** → **Sign in with Apple** (repo includes `App/App.entitlements`).
+1. **Apple Developer** → Identifiers → `io.github.YaoHuan123.huanqi` → enable **Sign in with Apple** and **In-App Purchase** → Save.
+2. **Profiles** → your **App Store** profile (`huanqi-appstore`) must be recreated **after** those capabilities are enabled, then re-upload to Codemagic.
+3. **Xcode** → App target → **Signing & Capabilities** → **Sign in with Apple** (repo includes `App/App.entitlements`).
 3. **Device** → Settings → sign in to your **Apple Account** (required even on a real iPhone).
 4. **Rebuild** after changes: `npm run ios --workspace=mobile` then Run from Xcode (not an old IPA).
 5. **Backend** `.env` on the machine at `VITE_API_BASE_URL`:
