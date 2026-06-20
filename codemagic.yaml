@@ -70,7 +70,4 @@ workflows:
       - apps/mobile/ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
 
-    publishing:
-      app_store_connect:
-        auth: integration
-        submit_to_testflight: true
+    # Manual upload: download IPA from Artifacts → Apple Transporter → App Store Connect

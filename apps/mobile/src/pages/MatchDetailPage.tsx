@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { en } from "@huanqi/shared";
 import { apiRequest } from "../api/client";
+import { getUnlockProduct, purchaseUnlockProduct, type UnlockProduct } from "../lib/iap";
 import { IosBanner, IosNavBar, IosPage, IosSection } from "../components/ios/IosChrome";
 
 type MatchDetail = {
@@ -27,6 +29,7 @@ export function MatchDetailPage() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const [match, setMatch] = useState<MatchDetail | null>(null);
+  const [unlockProduct, setUnlockProduct] = useState<UnlockProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [actionLoading, setActionLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,6 +49,11 @@ export function MatchDetailPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
+  useEffect(() => {
+    if (!match?.canUnlock) return;
+    void getUnlockProduct().then(setUnlockProduct);
+  }, [match?.canUnlock]);
+
   async function runAction(path: string, method = "POST") {
     setActionLoading(true);
     setError(null);
@@ -58,6 +66,35 @@ export function MatchDetailPage() {
       setActionLoading(false);
     }
   }
+
+  async function unlockWithIap() {
+    setActionLoading(true);
+    setError(null);
+    try {
+      const purchase = await purchaseUnlockProduct();
+      await apiRequest(
+        `/api/matches/${id}`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            transactionId: purchase.transactionId,
+            productId: purchase.productId,
+          }),
+        },
+        true,
+      );
+      await load();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Purchase failed";
+      setError(/cancel/i.test(message) ? "Purchase canceled." : message);
+    } finally {
+      setActionLoading(false);
+    }
+  }
+
+  const unlockLabel = unlockProduct
+    ? en.matches.unlock.replace("$0.99", unlockProduct.priceString)
+    : en.matches.unlock;
 
   if (loading) {
     return (
@@ -91,19 +128,31 @@ export function MatchDetailPage() {
 
         <IosSection header="Their sensation">
           <div className="ios-article">{match.otherSensation.body}</div>
+          {!match.otherSensation.full && (
+            <p className="ios-login-footnote" style={{ marginTop: 12 }}>
+              Unlock to read the full sensation.
+            </p>
+          )}
         </IosSection>
 
         {(match.canUnlock || match.canConfirm || match.canShare) && (
           <IosSection header="Actions">
             {match.canUnlock && (
-              <button
-                type="button"
-                onClick={() => runAction(`/api/matches/${id}`)}
-                disabled={actionLoading}
-                className="ios-row ios-row--brand"
-              >
-                <span className="ios-row__label">Unlock (free beta)</span>
-              </button>
+              <>
+                <button
+                  type="button"
+                  onClick={unlockWithIap}
+                  disabled={actionLoading}
+                  className="ios-row ios-row--brand"
+                >
+                  <span className="ios-row__label">{unlockLabel}</span>
+                </button>
+                {unlockProduct && (
+                  <p className="ios-login-footnote" style={{ padding: "0 16px 8px" }}>
+                    {unlockProduct.title} · Apple In-App Purchase
+                  </p>
+                )}
+              </>
             )}
             {match.canConfirm && (
               <button

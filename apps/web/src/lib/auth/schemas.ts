@@ -21,3 +21,8 @@ export const verifyCodeSchema = consentSchema.extend({
 export const appleAuthSchema = consentSchema.extend({
   identityToken: z.string().min(1, "Missing Apple identity token"),
 });
+
+export const iosUnlockSchema = z.object({
+  transactionId: z.string().min(1, "Missing transaction ID"),
+  productId: z.string().min(1, "Missing product ID"),
+});

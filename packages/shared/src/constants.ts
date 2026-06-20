@@ -2,6 +2,8 @@
 export const APP_NAME = "HuanQi";
 export const APP_TAGLINE = "Find people who share the same surreal sensation";
 export const APP_STORE_SUBTITLE = "Semantic sensation matching";
+/** iOS App ID / Sign in with Apple client ID (audience for identity tokens) */
+export const APP_BUNDLE_ID = "io.github.YaoHuan123.huanqi";
 
 export const SUPPORTED_LOCALE = "en" as const;
 export const SUPPORTED_CONTENT_LANGUAGE = "en" as const;

@@ -103,7 +103,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   logRequest("GET", "/api/sensations");
 
   const auth = await requireApiSession(request);

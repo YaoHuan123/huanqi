@@ -86,3 +86,7 @@ openssl rand -hex 32      # CONTACT_ENCRYPTION_KEY
 | Apple account email contact | Instagram, Discord handles |
 
 See `幻契：超现实体感同频匹配工具 产品定位+Cursor开发TODO文档.md` for the full product spec.
+
+## Deploy API (production)
+
+See [`docs/deploy-aliyun.md`](docs/deploy-aliyun.md) for deploying the HTTPS API on Alibaba Cloud (Hong Kong / Singapore, Nginx, PM2, SSL).

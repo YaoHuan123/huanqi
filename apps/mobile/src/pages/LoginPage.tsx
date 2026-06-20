@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { APP_NAME, APP_TAGLINE } from "@huanqi/shared";
-import { appleLogin } from "../api/client";
+import { ApiError, appleLogin } from "../api/client";
+import { getApiBaseUrl } from "../lib/apiBase";
 import { authTokenStore } from "../lib/authToken";
 import { signInWithAppleNative } from "../lib/appleSignIn";
 import { IosBanner, IosSection } from "../components/ios/IosChrome";
@@ -28,7 +29,21 @@ export function LoginPage() {
       if (res.data.token) authTokenStore.set(res.data.token);
       navigate("/write", { replace: true });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Apple Sign In failed");
+      if (err instanceof ApiError) {
+        if (err.status === 503 || /not configured/i.test(err.message)) {
+          setError(
+            `Server not configured for Apple Sign In. On the API host, set APPLE_CLIENT_ID=io.github.YaoHuan123.huanqi and restart (currently: ${getApiBaseUrl() || "same origin"}).`
+          );
+        } else if (err.status === 401 && /verify Apple/i.test(err.message)) {
+          setError(err.message);
+        } else {
+          setError(`Server: ${err.message}`);
+        }
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Apple Sign In failed");
+      }
     } finally {
       setLoading(false);
     }

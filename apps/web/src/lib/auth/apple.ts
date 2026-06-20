@@ -1,17 +1,23 @@
 import appleSignin from "apple-signin-auth";
+import { APP_BUNDLE_ID } from "@huanqi/shared";
 
 export const APPLE_AUTH_DEV_MOCK_TOKEN = "dev-apple-mock-token";
 export const APPLE_AUTH_DEV_MOCK_SUB = "dev-mock-apple-sub";
 
 export type AppleProfile = {
   sub: string;
-  email: string;
+  email?: string;
   emailVerified: boolean;
 };
 
 function isDevMockEnabled(): boolean {
   const v = (process.env.APPLE_AUTH_DEV_MOCK ?? "").trim().toLowerCase();
   return v === "1" || v === "true" || v === "yes";
+}
+
+export function resolveAppleClientId(): string {
+  const configured = process.env.APPLE_CLIENT_ID?.trim();
+  return configured || APP_BUNDLE_ID;
 }
 
 export async function verifyAppleIdentityToken(
@@ -29,28 +35,32 @@ export async function verifyAppleIdentityToken(
     };
   }
 
-  const clientId = process.env.APPLE_CLIENT_ID;
-  if (!clientId) {
-    throw new Error("APPLE_CLIENT_ID is not configured");
-  }
+  const clientId = resolveAppleClientId();
 
-  const payload = await appleSignin.verifyIdToken(identityToken, {
-    audience: clientId,
-    ignoreExpiration: false,
-  });
+  let payload: Awaited<ReturnType<typeof appleSignin.verifyIdToken>>;
+  try {
+    payload = await appleSignin.verifyIdToken(identityToken, {
+      audience: clientId,
+      ignoreExpiration: false,
+    });
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    throw new Error(
+      `Apple token verification failed (audience ${clientId}): ${detail}`
+    );
+  }
 
   if (!payload.sub) {
     throw new Error("Invalid Apple token: missing sub");
   }
 
-  const email = payload.email;
-  if (!email) {
-    throw new Error("Apple account must share an email address");
-  }
+  const email =
+    typeof payload.email === "string" ? payload.email.toLowerCase() : undefined;
 
   return {
     sub: payload.sub,
-    email: email.toLowerCase(),
-    emailVerified: payload.email_verified === true || payload.email_verified === "true",
+    email,
+    emailVerified:
+      payload.email_verified === true || payload.email_verified === "true",
   };
 }

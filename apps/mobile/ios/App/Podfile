@@ -14,6 +14,7 @@ def capacitor_pods
   pod 'CapacitorCommunityAppleSignIn', :path => '../../../../node_modules/@capacitor-community/apple-sign-in'
   pod 'CapacitorPreferences', :path => '../../../../node_modules/@capacitor/preferences'
   pod 'CapacitorStatusBar', :path => '../../../../node_modules/@capacitor/status-bar'
+  pod 'CapgoNativePurchases', :path => '../../../../node_modules/@capgo/native-purchases'
 end
 
 target 'App' do

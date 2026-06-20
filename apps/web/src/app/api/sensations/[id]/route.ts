@@ -6,7 +6,7 @@ import { prisma } from "@/lib/prisma";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
-export async function DELETE(_request: NextRequest, context: RouteContext) {
+export async function DELETE(request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("DELETE", `/api/sensations/${id}`);
 
@@ -21,7 +21,7 @@ export async function DELETE(_request: NextRequest, context: RouteContext) {
   return jsonOk({ message: "Sensation deleted. Related matches were removed." });
 }
 
-export async function GET(_request: NextRequest, context: RouteContext) {
+export async function GET(request: NextRequest, context: RouteContext) {
   const { id } = await context.params;
   logRequest("GET", `/api/sensations/${id}`);
 

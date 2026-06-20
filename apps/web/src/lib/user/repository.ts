@@ -68,6 +68,13 @@ export async function upsertUserWithConsent(input: UpsertUserInput) {
   });
 }
 
+export async function getUserByAppleSub(appleSub: string) {
+  return prisma.user.findFirst({
+    where: { appleSub, deletedAt: null },
+    select: { id: true, email: true, emailVerified: true },
+  });
+}
+
 export async function getUserById(userId: string) {
   return prisma.user.findFirst({
     where: { id: userId, deletedAt: null },
