@@ -95,6 +95,6 @@ workflows:
     publishing:
       app_store_connect:
         auth: integration
-        submit_to_testflight: true
-        # Keep false: pick build + submit for App Review manually in Connect
+        # Upload IPA only; do not submit TestFlight beta review (needs extra test info)
+        submit_to_testflight: false
         submit_to_app_store: false
