@@ -1,13 +1,20 @@
 # HuanQi iOS — Codemagic (ios branch)
 #
 # App Store upload: profile huanqi-appstore
-# Certificate: reuse existing Distribution .p12 (Codemagic ref huanqi-hoc) or set to huanqi-appstore if re-uploaded
+# Certificate: reuse existing Distribution .p12 (Codemagic ref huanqi-hoc)
+#
+# Auto-upload to TestFlight: create App Store Connect API key in Apple,
+# add it in Codemagic Personal Account → Integrations (name must match below)
+#   integrations.app_store_connect: huanqi-asc
 
 workflows:
   huanqi-ios-appstore:
     name: HuanQi iOS App Store
     max_build_duration: 90
     instance_type: mac_mini_m2
+
+    integrations:
+      app_store_connect: huanqi-asc
 
     environment:
       ios_signing:
@@ -85,4 +92,9 @@ workflows:
       - apps/mobile/ios/App/build/ios/ipa/*.ipa
       - /tmp/xcodebuild_logs/*.log
 
-    # Manual upload: download IPA from Artifacts → Apple Transporter → App Store Connect
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        # Keep false: pick build + submit for App Review manually in Connect
+        submit_to_app_store: false
