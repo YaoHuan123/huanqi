@@ -3,14 +3,10 @@ import { requireApiSession } from "@/lib/auth/api-session";
 import { jsonOk, logRequest } from "@/lib/api/response";
 import { getMatchSide, isContactShared, isUnlocked, otherSide } from "@/lib/match/state";
 import { prisma } from "@/lib/prisma";
+import type { Match } from "@prisma/client";
 
 function matchStatus(
-  match: {
-    userAUnlockAt: Date | null;
-    userBUnlockAt: Date | null;
-    userAContactSharedAt: Date | null;
-    userBContactSharedAt: Date | null;
-  },
+  match: Match,
   side: "A" | "B",
 ): "locked" | "unlocked" | "waiting" | "contact_exchanged" {
   const unlocked = isUnlocked(match, side);
