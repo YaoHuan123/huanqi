@@ -2,7 +2,6 @@ import { NextRequest } from "next/server";
 import { requireApiSession } from "@/lib/auth/api-session";
 import { iosUnlockSchema } from "@/lib/auth/schemas";
 import { jsonError, jsonOk, logRequest } from "@/lib/api/response";
-import { excerpt } from "@/lib/sensation/text";
 import {
   assertIosUnlockPurchase,
 } from "@/lib/iap/verify-unlock";
@@ -42,8 +41,6 @@ function buildMatchResponse(
   if (!side) throw new Error("INVALID_SIDE");
 
   const other = otherSide(side);
-  const otherSensation = side === "A" ? match.sensationB : match.sensationA;
-  const selfSensation = side === "A" ? match.sensationA : match.sensationB;
 
   const unlocked = isUnlocked(match, side);
   const confirmed = isConfirmed(match, side);
@@ -57,11 +54,9 @@ function buildMatchResponse(
     id: match.id,
     loginEmail,
     similarityPercent: Math.round(match.similarityScore * 100),
-    otherSensation: {
-      body: unlocked ? otherSensation.body : excerpt(otherSensation.body, 220),
-      full: unlocked,
+    selfSensation: {
+      body: (side === "A" ? match.sensationA : match.sensationB).body,
     },
-    selfSensation: { body: selfSensation.body },
     my: {
       unlocked,
       confirmed,

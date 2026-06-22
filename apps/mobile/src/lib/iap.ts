@@ -21,7 +21,7 @@ export async function getUnlockProduct(): Promise<UnlockProduct | null> {
   if (!isIosNative() || isIapDevMockEnabled()) {
     return {
       productId: IAP_PRODUCTS.unlock,
-      title: "Unlock mutual contact",
+      title: "Unlock Match",
       priceString: "$0.99",
     };
   }
@@ -43,7 +43,7 @@ export async function getUnlockProduct(): Promise<UnlockProduct | null> {
   } catch {
     return {
       productId: IAP_PRODUCTS.unlock,
-      title: "Unlock mutual contact",
+      title: "Unlock Match",
       priceString: "$0.99",
     };
   }

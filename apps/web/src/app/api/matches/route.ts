@@ -1,9 +1,27 @@
 import { NextRequest } from "next/server";
 import { requireApiSession } from "@/lib/auth/api-session";
 import { jsonOk, logRequest } from "@/lib/api/response";
-import { getMatchSide, isUnlocked } from "@/lib/match/state";
-import { excerpt } from "@/lib/sensation/text";
+import { getMatchSide, isContactShared, isUnlocked, otherSide } from "@/lib/match/state";
 import { prisma } from "@/lib/prisma";
+
+function matchStatus(
+  match: {
+    userAUnlockAt: Date | null;
+    userBUnlockAt: Date | null;
+    userAContactSharedAt: Date | null;
+    userBContactSharedAt: Date | null;
+  },
+  side: "A" | "B",
+): "locked" | "unlocked" | "waiting" | "contact_exchanged" {
+  const unlocked = isUnlocked(match, side);
+  if (!unlocked) return "locked";
+
+  const shared = isContactShared(match, side);
+  const otherShared = isContactShared(match, otherSide(side));
+  if (shared && otherShared) return "contact_exchanged";
+  if (shared) return "waiting";
+  return "unlocked";
+}
 
 export async function GET(request: NextRequest) {
   logRequest("GET", "/api/matches");
@@ -18,26 +36,18 @@ export async function GET(request: NextRequest) {
       OR: [{ userAId: userId }, { userBId: userId }],
     },
     orderBy: { createdAt: "desc" },
-    include: {
-      sensationA: { select: { id: true, body: true, userId: true } },
-      sensationB: { select: { id: true, body: true, userId: true } },
-    },
   });
 
   return jsonOk({
     matches: matches.map((match) => {
       const side = getMatchSide(match, userId)!;
-      const isUserA = side === "A";
-      const otherSensation = isUserA ? match.sensationB : match.sensationA;
-      const unlocked = isUnlocked(match, side);
 
       return {
         id: match.id,
         similarityScore: match.similarityScore,
         similarityPercent: Math.round(match.similarityScore * 100),
-        unlocked,
+        status: matchStatus(match, side),
         createdAt: match.createdAt,
-        preview: excerpt(otherSensation.body, unlocked ? 220 : 120),
       };
     }),
   });

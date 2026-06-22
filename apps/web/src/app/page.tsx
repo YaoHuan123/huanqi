@@ -21,8 +21,8 @@ export default function Home() {
         </h1>
         <p className="max-w-xl text-lg leading-relaxed text-stone-400">
           HuanQi matches surreal bodily and perceptual experiences using semantic similarity — not
-          tags, photos, or profiles. No in-app chat. After a mutual match, unlock and share your
-          Apple account email to connect off-platform.
+          tags, photos, or profiles. No in-app chat. Other users' sensation text is never shown;
+          after a mutual match, unlock contact and optionally share your Apple account email off-platform.
         </p>
       </section>
 

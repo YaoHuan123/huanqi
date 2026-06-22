@@ -9,7 +9,6 @@ type MatchDetail = {
   id: string;
   similarityPercent: number;
   loginEmail: string;
-  otherSensation: { body: string; full: boolean };
   selfSensation: { body: string };
   my: {
     unlocked: boolean;
@@ -138,32 +137,22 @@ export default function MatchDetailPage() {
           <span className="shell-match-score">{match.similarityPercent}%</span> resonance
         </h1>
         <span className="shell-match-meta">
-          {!match.my.unlocked ? "Locked" : match.my.bothShared ? "Email exchanged" : "Unlocked"}
+          {!match.my.unlocked ? "Contact locked" : match.my.bothShared ? "Email exchanged" : "Unlocked"}
         </span>
       </div>
 
-      <section className="shell-stack-md">
-        <h2 className="shell-section-label">Their sensation</h2>
-        <article className="shell-sensation-block">{match.otherSensation.body}</article>
-        {!match.otherSensation.full && (
-          <p className="shell-match-meta">Pay to unlock to read the full sensation.</p>
-        )}
-      </section>
+      <p className="shell-page-desc mt-4">{en.matches.detailHint}</p>
 
-      {match.my.unlocked && (
-        <section className="shell-stack-md">
-          <h2 className="shell-section-label">Your sensation in this match</h2>
-          <article className="shell-sensation-block" style={{ color: "var(--shell-label-2)" }}>
-            {match.selfSensation.body}
-          </article>
-        </section>
-      )}
+      <section className="shell-stack-md mt-8">
+        <h2 className="shell-section-label">Your sensation in this match</h2>
+        <article className="shell-sensation-block" style={{ color: "var(--shell-label-2)" }}>
+          {match.selfSensation.body}
+        </article>
+      </section>
 
       {match.canUnlock && (
         <div className="shell-unlock-panel">
-          <p>
-            Unlock to read their full sensation and decide if this match is right for you.
-          </p>
+          <p>{en.matches.unlockHint}</p>
           <button
             type="button"
             onClick={unlock}
@@ -178,14 +167,14 @@ export default function MatchDetailPage() {
 
       {match.canConfirm && (
         <div className="shell-card shell-stack-md" style={{ marginTop: "2rem" }}>
-          <p className="text-sm text-stone-200">Is this the resonance you were looking for?</p>
+          <p className="text-sm text-stone-200">Confirm this semantic match?</p>
           <button
             type="button"
             onClick={confirmMatch}
             disabled={actionLoading}
             className="rounded-lg bg-emerald-700 px-4 py-2 text-sm text-white hover:bg-emerald-600 disabled:opacity-50"
           >
-            Yes, this is my match
+            Yes, confirm match
           </button>
         </div>
       )}

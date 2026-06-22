@@ -9,7 +9,6 @@ type MatchDetail = {
   id: string;
   similarityPercent: number;
   loginEmail: string;
-  otherSensation: { body: string; full: boolean };
   selfSensation: { body: string };
   my: {
     unlocked: boolean;
@@ -126,13 +125,14 @@ export function MatchDetailPage() {
       <IosPage>
         {error && <IosBanner tone="error">{error}</IosBanner>}
 
-        <IosSection header="Their sensation">
-          <div className="ios-article">{match.otherSensation.body}</div>
-          {!match.otherSensation.full && (
-            <p className="ios-login-footnote" style={{ marginTop: 12 }}>
-              Unlock to read the full sensation.
-            </p>
-          )}
+        <IosSection header="Match">
+          <p className="ios-login-hint" style={{ padding: "0 16px 12px" }}>
+            {en.matches.detailHint}
+          </p>
+        </IosSection>
+
+        <IosSection header="Your sensation">
+          <div className="ios-article">{match.selfSensation.body}</div>
         </IosSection>
 
         {(match.canUnlock || match.canConfirm || match.canShare) && (

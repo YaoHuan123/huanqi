@@ -19,7 +19,7 @@
   },
   "contact": {
     "title": "Contact",
-    "hint": "Only your login email can be shared, and only after you unlock and confirm a match.",
+    "hint": "Only your login email can be shared, and only after you unlock and confirm a match. Other users' sensation text is never shown.",
     "email": "Login email"
   },
   "library": {
@@ -28,8 +28,10 @@
   },
   "matches": {
     "title": "Your matches",
-    "unlock": "Unlock mutual contact — $0.99",
-    "preview": "Matched sensation preview",
+    "unlock": "Unlock contact — $0.99",
+    "unlockHint": "Unlock this semantic match to confirm and optionally share your login email.",
+    "detailHint": "HuanQi never shows another person's sensation. You only see a similarity score until contact is unlocked.",
+    "listSubtitle": "Similarity scores only — other users' text is never shown.",
     "noChat": "HuanQi does not include in-app messaging."
   },
   "settings": {
