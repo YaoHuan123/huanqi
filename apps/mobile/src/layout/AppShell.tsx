@@ -79,7 +79,7 @@ export function AppShell() {
   return (
     <div className="app-root">
       <div className="app-shell-phone">
-        <div className={`app-shell-body${withTabs ? " app-shell-body--tabs" : ""}`}>
+        <div className="app-shell-body">
           {isSubpage ? (
             <div className="app-subpage">
               <div className="app-subpage-body shell-scroll-y">

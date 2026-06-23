@@ -4,11 +4,16 @@
 @import "./styles/ios-ui.css";
 
 html.capacitor-native {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
   background: var(--shell-bg-grouped);
 }
 
 html.capacitor-native body,
 html.capacitor-native #root {
-  min-height: 100dvh;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
   background: var(--shell-bg-grouped);
 }
