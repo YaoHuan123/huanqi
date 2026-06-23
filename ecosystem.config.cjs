@@ -19,7 +19,7 @@ module.exports = {
       name: "huanqi-web",
       cwd: __dirname,
       script: "npm",
-      args: "run start --workspace=web",
+      args: "run start:web",
       instances: 1,
       exec_mode: "fork",
       autorestart: true,

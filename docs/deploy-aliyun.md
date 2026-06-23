@@ -238,19 +238,17 @@ npm run db:push
 
 ## 五、PM2 常驻进程
 
-在仓库根目录创建 `ecosystem.config.cjs`：
+在仓库根目录使用已提交的 `ecosystem.config.cjs`（`cwd` 用 `__dirname`，无需手改路径）：
 
 ```javascript
 module.exports = {
   apps: [
     {
       name: "huanqi-api",
-      cwd: "/home/huanqi/huanqi",
+      cwd: __dirname,
       script: "npm",
-      args: "run start --workspace=web -- -p 3001 -H 127.0.0.1",
-      env: {
-        NODE_ENV: "production",
-      },
+      args: "run start:web",
+      env: { NODE_ENV: "production" },
       max_memory_restart: "512M",
       autorestart: true,
     },
@@ -258,12 +256,12 @@ module.exports = {
 };
 ```
 
-> 把 `cwd` 改成你的实际路径。
+根目录 `package.json` 已包含 `"start:web": "npm run start --workspace=web -- -p 3001 -H 127.0.0.1"`。
 
 启动并设置开机自启：
 
 ```bash
-cd ~/huanqi
+cd ~/apps/huanqi   # 你的实际路径，例如 /home/admin/apps/huanqi
 pm2 start ecosystem.config.cjs
 pm2 save
 pm2 startup    # 按提示执行它输出的 sudo 命令
